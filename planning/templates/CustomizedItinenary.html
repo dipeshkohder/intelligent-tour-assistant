@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+  <title>Trip Planner</title>
+  <script src =  "https://maps.googleapis.com/maps/api/js"></script>
+      
+      <script type="text/javascript">
+         function loadMap() {
+			
+			
+			console.log()
+			
+			console.log()
+            var mapOptions = {
+               center:new google.maps.LatLng(19.373341, 78.662109),
+               zoom:7
+            }
+			
+            var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
+			{% for obj in objects.response.groups.0.items %}
+			
+            var marker = new google.maps.Marker({
+               position: new google.maps.LatLng({{obj.venue.location.lat}},{{obj.venue.location.lng}}),
+               map: map,
+            });
+			{% endfor %}
+         }
+		 
+		 function Description(i)
+		 {
+			{% for i in list %}
+				console.log(" i : ",{{list.i}});
+			{% endfor %}
+		
+			
+		 }
+
+		 
+		 function delete_place(r)
+		 {
+					console.log(r)
+					deleteplacelist.push(r)
+					$("#"+r).remove();
+					console.log("Dipesh : " + deleteplacelist)
+		 }
+		 
+		 function ShowList()
+		 {
+				//To assign the deleteplacelist
+				document.getElementById('deleteplacelist').value = deleteplacelist.toString();
+			
+				//To showlist
+				document.getElementById("p1").innerHTML = " ";
+				{% for i in mainlist %}
+					document.getElementById("p1").innerHTML += "{{i.p_name}}";
+				{%endfor%}
+		 }
+		 
+      </script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<div class="container" >
+
+  
+   
+
+<div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
+ 
+  <br><br>
+<!--{% for a,b,c in list_a %}
+	
+	
+			{{a}} {{b}} {{c}}
+		
+	
+{% endfor %}-->  
+<!--{% for img,durstart,durend,rating in listabc %}
+{% for obj in objects.response.groups.0.items %}
+	
+		{%if forloop.counter == forloop.parentloop.counter%}
+			
+			 
+			  <div class="row">
+				
+				<div class="mine-row">
+				
+				
+					<img src="{{img}}" alt="xyz">
+						<div class="wine-text-container">
+					
+							
+							<h3><div>{{obj.venue.name}}</div></h3>
+							<b>VISITING TIME &nbsp;&nbsp;:  {{durstart}}   {{durend}} </b>
+							<br>
+							<div class="desc" id = "description"></div><br>
+							
+							<b>Ratings : {{rating}}</b>
+						</div>
+				</div>
+				
+			</div>
+			
+			
+		{%endif%}
+
+
+	{% endfor %}
+{% endfor %}-->
+{% for obj in CustomizedItinenary %}
+	
+		
+			
+			 
+			  <div class="row">
+				
+				<div class="mine-row" id="{{forloop.counter}}">
+				
+				
+					<img src="" alt="xyz">
+						<div class="wine-text-container">
+							
+							<h3><div>{{obj.p_name}}</div></h3>
+							<b> </b>
+							<br>
+							<div class="desc" id = "description"></div><br>
+							<b>ADDRESS : {{obj.p_address}}</b>
+							<b>Ratings : {{obj.p_ratings}}</b>
+							<b>Type  : {{obj.p_categorytype}}</b>
+							<b>Distance : {{obj.p_distance}}</b>
+							
+						</div>
+				</div>
+				
+			</div>
+			
+			
+		
+
+
+{% endfor %}
+
+<!--
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 2</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 4</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 3</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+-->
+<style>
+img {
+  margin-top:30px;
+  margin-bottom:30px;
+  margin-right:10px;
+  margin-left: 5px;
+  width:250px;
+
+  /* height: 150px; */
+}
+#sample{
+  margin:0 auto;
+  border: 5px solid black;
+  padding:20px;
+  width:600px;
+  height:420px;
+}
+.mine-row {
+  display: flex;
+  flex-direction: row;
+  
+  padding: 10px 0;
+  margin: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.wine-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px;
+  padding:20px;
+}
+.desc{
+	text-align: justify;
+  width: 750px;
+}
+</style>
+</div>
+</body>
+
+</html>

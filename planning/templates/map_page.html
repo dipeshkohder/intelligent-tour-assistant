@@ -4,7 +4,7 @@
 	
   <title>Trip Planner</title>
   <script src =  "https://maps.googleapis.com/maps/api/js"></script>
-      
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
       <script type="text/javascript">
 	  var deleteplacelist = new Array();
 	  var addplacelist = new Array();
@@ -34,7 +34,6 @@
 				console.log(" i : ",{{list.i}});
 			{% endfor %}
 		
-			
 		 }
 
 		 
@@ -42,8 +41,11 @@
 		 {
 					console.log(r)
 					deleteplacelist.push(r)
-					$("#"+r).remove();
-					console.log("Dipesh : " + deleteplacelist)
+					$("#mr"+r).remove();
+					$("#span"+r).remove();
+					$("#spanline"+r).remove();
+
+					console.log("Dipesh : " + deleteplacelist+" span id = "+"span"+r);
 		 }
 		 
 		 function add_place(r)
@@ -51,7 +53,7 @@
 		 
 					console.log(r)
 					addplacelist.push(r)
-					$("#"+r).remove();
+					$("#card"+r).remove();
 					console.log("Dipesh : " + addplacelist)
 		 }
 		 
@@ -62,32 +64,144 @@
 				document.getElementById('addplacelist').value = addplacelist.toString();
 		 }
 		
-      </script>
+		
+		</script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ 
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
+<body >
 
 
-<div class="container" >
-  <div class="jumbotron">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 60px;">
+    <a class="navbar-brand" href="#" style="padding-left:15px;">
+        <img src="../../assets/images/logo2.png" alt="Logo" style="width:40px;height: 40px;">
+    </a>
+    <h3 style="color: white; font-family:'Times New Roman', Times, serif; padding-top: 15px;"><b>ESCAPE</b> PLAN</h3>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+       <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navb">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
+                    aria-hidden='true'></i> &nbsp;<b>SEARCH</b></button>
+        </form>
+    </div>
+</nav>
+<!-- niche wala( blue ) header starts -->
+
+
+<nav class="navbar navbar-expand-sm  justify-content-center sticky-top"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px; background-color:white;">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navb">
+        <ul class="navbar-nav " style="margin-top:15px;">
+            
+
+            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../Home"  style="cursor: pointer;"><b>HOME</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a  class="nav-link" routerLink="../Friends" onclick="window.location.href='../Friends'"  style="cursor: pointer;"><b>DASHBOARD</b></a>
+            </li>
+            
+
+            <a class="navbar-brand" href="#" style="padding-left:50px;">
+                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
+            </a>
+
+            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                <a class="nav-link" routerLink="../MeetOurTeam" style="cursor: pointer;"><b>MEET OUR TEAM</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../ContactUs" style="cursor: pointer;"><b>GET IN TOUCH</b></a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav">
+        
+        
+            <li class="nav-item" id="signin" style="display: inline;">
+                <a class="btn btn-outline-dark" style="margin-top:5px;" href="/planning/login/"><b>Sign In</b></a>
+				<a class="btn btn-outline-dark" style="margin-top:5px;" href="/planning/signup/"><b>Sign UP</b></a>
+                <div class="modal fade shadow" id="loginmodal" style="border: 6px solid white;">
+                    <div class="modal-dialog  modal-md">
+                        <div class="modal-content shadow" style="border-radius:0px;">
+                            <div class="modal-header" style="border-style:none;">
+                                <h4 class="modal-title">Login</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="container"
+                                style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;">
+                                <div class="g-signin2" style="width: 350px;margin-left:60px;margin-bottom:50px;"
+                                    data-onsuccess="onSignIn"></div>
+                            </div>
+                            <div class="container" style="border-bottom: 1px solid gainsboro;margin-bottom: 30px;">
+                                <!-- <div class="text-danger">{{ errormsg }}</div> -->
+                                <form >
+                                    <div class="form-group">
+                                        <label for="uname" class="text-align">Username:</label>
+                                        <input type="text" class="form-control" id="uname" placeholder="Enter username"
+                                            name="uname" formControlName="username">
+                                        <!-- <div class="text-danger">{{ erroruname }}</div> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Password:</label>
+                                        <input type="password" class="form-control" id="pwd"
+                                            placeholder="Enter password" name="password" formControlName="password">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary"
+                                        [disabled]="!formdata.valid">Submit</button>
+                                </form>
+                                <a id="register" class="text-primary"
+                                    style="background: transparent;border:none;cursor: pointer;">Don't
+                                    have an account?Create one</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </li>
+        
+    </ul>
+
+
+</nav>
+
+
+
+
+<!-- main content -->
+
+
+<!--  kai kaam nu nathi aa
     <h1>{{pack_days}} DAYS IN {{city}}</h1>
-  </div>
+
   <h4>Start Date:{{start}}</h4><br>
-  <h4>End Date:{{end}}</h4>
+  <h4>End Date:{{end}}</h4> -->
 
-<br>
 
-<h4>PACKAGE : {{pack_days}}DAYS / {{pack_night}}NIGHTS </h4>
-  
-   
 
-<div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
- 
-  <br><br>
+<!-- <h4>PACKAGE : {{pack_days}}DAYS / {{pack_night}}NIGHTS </h4> -->
+
+
 <!--{% for a,b,c in list_a %}
 	
 	
@@ -127,87 +241,146 @@
 
 	{% endfor %}
 {% endfor %}-->
-{% for obj in mainlist %}
+
+<script>
+$(document).ready(function(){
+		$("#flip").click(function(){
+			$("#panel").slideToggle("slow");
+			$(this).css({"background-color":"black","color":"white"})
+		});
+		});
+$(document).ready(function(){
+	$("#custom").click(function(){
+		$(".column4").show();
+		$("#build").show();
+	});	
+});
+
+$(document).ready(function(){
+	$("#build").click(function(){
+		$(".column4").hide();
+		$("#build").hide();
+	});	
+});
+</script>
+
+<div class="container">
+<br><br>
+
+	<form action="planning/deletefunction/" method="post">
+      <div id="flip" class="mybold-text" ><b>&nbsp;&nbsp;&nbsp;{{pack_days}} days in {{city}}</b>
+	  <!-- {%csrf_token%} -->
+	  <button id="build" onClick= "ShowList()" name="show" value="show" class="btn btn-sm btn-outline-light" style="display:none; float:right;"> Build New Customized Itinenary </button>
+		<input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
+	  <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
+	  <input type="hidden" name="addplacelist" id="addplacelist" value="fruitsalad">
+
+</form>
 	
+	
+</div>
+<div id="panel" style="text-align:center;">
+	<button class="btn btn-dark"> Save This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-dark"> Download This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-dark" id="custom"> Customize This Itinerary </button>&nbsp;&nbsp;&nbsp;
+</div>
+<br><br>
+<b class="mybold-text">DAY BY DAY PLAN </b>
+<br><br><br><br>
+
+<p id="rcorners1"><b style="Vertical-align:middle;">Day, Date</b></p>
+<span class="vl"></span><br>
+<b style="margin-bottom:0px; margin-left:40px; font-size:25px;">
+ {{city}}
+</b>
+
+<br>
+<!-- <div class="vl"></div> -->
+{% for obj in mainlist %}
+<br>
+	<span class="vl" id="span{{forloop.counter}}">
+
+		<div style="height:40px; margin-left:65px;" >
+			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a href=# ><i>30 min</i></a>
+		</div>
+	</span>
+	<span class="vl" id="spanline{{forloop.counter}}"></span>
+		<div class="row" style="margin-top:0px;">
 		
-			
-			 
-			  <div class="row">
-				
-				<div class="mine-row" id="{{forloop.counter}}">
-				
-				
-					<img src="" alt="xyz">
-						<div class="wine-text-container">
-						<button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button>
+			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+
+				<div class="column1"> start time thi end time of this place </div>
+
+				<div class="column2">
+					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
+					<button class="btn btn-dark" style="width:155px;"> Explore This Place </button>
+				</div>
+				<div class="column3">
+					<div class="wine-text-container">
+						
+						<!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
 							
 							<h3><div>{{obj.p_name}}</div></h3>
-							<b> </b>
+							<div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b>
+							
 							<br>
 							<div class="desc" id = "description"></div><br>
 							<b>ADDRESS : {{obj.p_address}}</b>
-							<b>Ratings : {{obj.p_ratings}}</b>
+							 
 							<b>Type  : {{obj.p_categorytype}}</b>
-							<b>Distance : {{obj.p_distance}}</b>
+							<b>Distance : {{obj.p_distance}}</b><br><br>
 							
-						</div>
+					</div>
+				</div>	
+
+				<div class="column4" style="display:none;">
+					<button id="del" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
 				</div>
-				
+
 			</div>
+				
+		</div>
 			
-			
-		
-
-
 {% endfor %}
-
-		<h1 id="here">Suggested Place List</h1>
+<br><br><br>
+		<h3 style=" font-family:verdana; margin:2px; padding:2px; height:65px; vertical-align:middle;"><b>OTHER INTERESTING PLACES TO VISIT IN {{city}}</b></h3>
 		
-		
-		
+		<br><br>
+	<ul class="cards">			
 		{% for obj in suggestionList %}
 	
-		
-			
-			 
-			  <div class="row">
+    	<li class="cards_item"  id="card{{forloop.counter}}">
+      	<div class="card" style="width:300px;">
+        	<div class="card_image"><img class="imgCard" src="https://picsum.photos/500/300/?image=10"></div>
+        	<div class="card_content">
+          		<h2 class="card_title">{{obj.p_name}}</h2><b style=color:white;>Ratings : {{obj.p_ratings}}</b><br>
+          	<p class="card_text">
+			  <br>
+				<b>ADDRESS : {{obj.p_address}}</b><br>
 				
-				<div class="mine-row" id="{{forloop.counter}}">
-				
-				
-					<img src="" alt="xyz">
-						<div class="wine-text-container">
-						<button class="btn-primary" onClick="add_place({{forloop.counter}})">ADD PLACE</button>
-							
-							<h3><div>{{obj.p_name}}</div></h3>
-							<b> </b>
-							<br>
-							<div class="desc" id = "description"></div><br>
-							<b>ADDRESS : {{obj.p_address}}</b>
-							<b>Ratings : {{obj.p_ratings}}</b>
-							<b>Type  : {{obj.p_categorytype}}</b>
-							<b>Distance : {{obj.p_distance}}</b>
-							
-						</div>
-				</div>
-				
-			</div>
-			
-			
-		
-
+				<b>Type  : {{obj.p_categorytype}}</b><br>
+				<b>Distance : {{obj.p_distance}}</b><br>
+			  </p>
+          	<button class="btnCard card_btn" onClick="add_place({{forloop.counter}})"><b>ADD TO ITINERARY</b></button>
+        	</div>
+      	</div>
+    	</li>
+	
 
 {% endfor %}
+</ul>
 
-<form action="planning/deletefunction/" method="post">
+<div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
+
+<!-- <form action="planning/deletefunction/" method="post">
       {%csrf_token%}
 	  
 	  <input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
 	  <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
 	  <input type="hidden" name="addplacelist" id="addplacelist" value="fruitsalad">
 	  <button onClick= "ShowList()" name="show" value="show">Build Customized Itinenary</button>
-</form>
-
+</form> -->
+</div>
 <!--
 <div class="row">
   <div class="mine-row">
@@ -238,6 +411,203 @@
 </div>
 -->
 <style>
+#panel, #flip {
+  padding: 5px;
+  text-align: left;
+  background-color: #000000;
+	color:#ffffff;
+  border: solid 3px #000000;
+  cursor:pointer;
+}
+#flip:hover{
+	cursor:pointer;
+	background-color: #000000;
+	color:#ffffff;
+  border: solid 3px #000000;
+}
+#panel {
+  padding: 50px;
+  display: none;
+  background:#ffad33;
+  opacity:0.8;
+}
+
+.imgCard {
+  height: auto;
+  /* max-width: 100%; */
+  /* width:auto; */
+  align-content:center;
+  vertical-align: middle;
+}
+
+.btnCard {
+  color: black;
+  padding: 0.8rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  font-weight: 400;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: white;
+  
+}
+
+.btnCard:hover {
+  background-color:black;
+  color:white;
+  border:2px solid white;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+}
+
+.cards_item {
+  display: flex;
+  padding: 1rem;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+@media (min-width: 40rem) {
+  .cards_item {
+    width: 50%;
+  }
+}
+
+@media (min-width: 56rem) {
+  .cards_item {
+    width: 33.3333%;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);	
+border:1px solid black;	
+}
+
+.card_content {
+  padding: 1rem;
+  background: black;
+  height:250px;
+}
+
+.card_title {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  margin: 0px;
+}
+
+.card_text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;    
+  font-weight: 400;
+}
+
+
+/* upar wadu black rectangle */
+#rcorners1 {
+  border-radius: 25px;
+  background: #000000;
+   font-size:20px;
+  width: 200px;
+  height: 40px; 
+  color:white;
+  text-align:center;
+   
+}
+
+/* Trash Button mate */
+#del {
+	
+  background-color: black;
+  width:50px;
+	
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#del:hover {
+  background-color: white;
+  color:black;
+	border:2px solid black;
+}
+/* position of trash button maate */
+
+.column1 {
+  float: left;
+  width: 15%;
+  padding: 10px;
+  
+}
+.column2 {
+  float: left;
+  width: 25%;
+  padding: 10px;
+  text-align:center;
+  
+}
+.column3 {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  margin-left:20px;
+}
+.column4 {
+  float: left;
+  width: 10%;
+  padding: 10px;
+  
+}
+/* General bold text*/ 
+.mybold-text{
+	font-family:"verdana";
+	font-size: 22px;
+}
+/* Vertical Line */
+.vl {
+  border-left: 2px solid grey;
+  z-index:1;
+  position: relative;
+  margin-left:82px;
+  
+  width:3px;
+  top: 0;
+  opacity:1.0;
+  height:100px;
+}
+
+.home_bkg{
+	position: absolute;
+	top: 50%; 
+	left: 50%; 
+	transform: translate(-50%, -50%); 
+	font-family:verdana; 
+	color:white; 
+	text-shadow: 6px 6px 4px #000000;
+	white-space:nowrap;
+}
 img {
   margin-top:30px;
   margin-bottom:30px;
@@ -257,13 +627,15 @@ img {
 .mine-row {
   display: flex;
   flex-direction: row;
+  width:90%;
   
   padding: 10px 0;
-  margin: 25px;
+  margin: 25px auto;;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .wine-text-container {
+	z-index:0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -272,7 +644,7 @@ img {
 }
 .desc{
 	text-align: justify;
-  width: 750px;
+  	width: 750px;
 }
 </style>
 </div>

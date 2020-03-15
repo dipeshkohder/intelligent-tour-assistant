@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib import auth
 from django.template.context_processors import csrf
 from django.utils.dateparse import parse_date
-#from .models import user_details,camp_details,tourist_details
+from .models import user_details
 from django.template import RequestContext
-#from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 #from django.shortcuts import render
 from pandas.io.json import json_normalize
 import folium
@@ -343,7 +343,7 @@ def trip(request):
 					
 					main_list.append(mainobject)
 					print("Object mathi",mainobject.p_name)
-					
+					SuggestionList.clear()
 									
 				else:
 				
@@ -511,4 +511,62 @@ def deletefunction(request):
 
 	return render(request,'CustomizedItinenary.html',{'CustomizedItinenary' : OptimizedItinerary})	
 
+def login(request):
+	
+	return render(request,'login.html')
 
+
+def auth_view(request):
+	username = request.POST.get('email', '')
+	password = request.POST.get('pass', '')
+	user = auth.authenticate(username=username,password=password)
+	print(username)
+	print(password)
+	
+	print(user)
+	if user is not None:
+		auth.login(request, user)
+		if(user.is_superuser):
+			request.session['name']=username
+			ab = request.session['name']
+			context={'ab' : ab,}
+			return HttpResponseRedirect('/planning/home/',context)
+	else:
+		if user_details.objects.filter(email=username).exists() and user_details.objects.get(email=username).password==password:
+			 
+			
+			request.session['username']=username
+			ab = request.session['username']
+			
+			context={'ab' : ab,}
+			context['request']=request
+			#print(details)
+			print(request.session['username'])
+			return HttpResponseRedirect('/planning/home/',context)
+		else:
+			context={}
+			return HttpResponseRedirect('/planning/login/',context)
+
+
+def signup(request):
+	
+	return render(request,'signup.html')
+	
+def adduser_info(request):
+	#c = RequestContext(request)
+	#c = {}
+	#c.update(csrf(request))
+	uid = request.POST.get('uname', '')
+	
+	pas = request.POST.get('password', '')
+	
+	fnam=request.POST.get('fname','')
+	lnam = request.POST.get('lname', '')
+	
+	emai = request.POST.get('email', '')
+	
+	mob = request.POST.get('mobile', '')
+	
+	t = user_details(username = uid, password=pas,first_name=fnam,last_name=lnam,email=emai,mo_no=mob)
+	t.save()
+	return render(request,"login.html")

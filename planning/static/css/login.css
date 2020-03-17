@@ -1,0 +1,36 @@
+html {
+  font-family: "Nunito";
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Raleway";
+}
+
+.card-title {
+  font-weight: bolder;
+}
+
+.background-image {
+  background:url("https://images.unsplash.com/photo-1446768500601-ac47e5ec3719?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+  background-position: center;
+  background-size: cover;
+  display: block;
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 1;
+  height: 100%;
+}
+
+.title h3 {
+  margin: 0;
+  padding: 40px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.card {
+  top: 40px;
+  position: relative;
+  z-index: 2;
+}

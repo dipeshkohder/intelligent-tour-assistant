@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+  <title>Trip Planner</title>
+  <script src =  "https://maps.googleapis.com/maps/api/js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> <!-- Style-CSS --> 
+
+      <script type="text/javascript">
+	  var deleteplacelist = new Array();
+	  var addplacelist = new Array();
+         function loadMap() {
+			
+			console.log()
+			
+			console.log()
+            var mapOptions = {
+               center:new google.maps.LatLng(19.373341, 78.662109),
+               zoom:7
+            }
+			
+            var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
+			{% for obj in objects.response.groups.0.items %}
+			
+            var marker = new google.maps.Marker({
+               position: new google.maps.LatLng({{obj.venue.location.lat}},{{obj.venue.location.lng}}),
+               map: map,
+            });
+			{% endfor %}
+         }
+		 
+		 function Description(i)
+		 {
+			{% for i in list %}
+				console.log(" i : ",{{list.i}});
+			{% endfor %}
+		
+		 }
+
+		 function ShowList()
+		 {
+				//To assign the deleteplacelist
+				document.getElementById('deleteplacelist').value = deleteplacelist.toString();
+				document.getElementById('addplacelist').value = addplacelist.toString();
+		 }
+		
+		
+		</script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+ 
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body >
+
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 60px;">
+    <a class="navbar-brand" href="#" style="padding-left:15px;">
+        <img src="../../assets/images/logo2.png" alt="Logo" style="width:40px;height: 40px;">
+    </a>
+    <h3 style="color: white; font-family:'Times New Roman', Times, serif; padding-top: 15px;"><b>ESCAPE</b> PLAN</h3>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+       <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navb">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
+                    aria-hidden='true'></i> &nbsp;<b>SEARCH</b></button>
+        </form>
+    </div>
+</nav>
+<!-- niche wala( blue ) header starts -->
+
+
+<nav class="navbar navbar-expand-sm  justify-content-center sticky-top"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px; background-color:white;">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navb">
+        <ul class="navbar-nav " style="margin-top:15px;">
+            
+
+            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../Home"  style="cursor: pointer;"><b>HOME</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a  class="nav-link" routerLink="../Friends" onclick="window.location.href='../Friends'"  style="cursor: pointer;"><b>DASHBOARD</b></a>
+            </li>
+            
+
+            <a class="navbar-brand" href="#" style="padding-left:50px;">
+                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
+            </a>
+
+            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                <a class="nav-link" routerLink="../MeetOurTeam" style="cursor: pointer;"><b>MEET OUR TEAM</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../ContactUs" style="cursor: pointer;"><b>GET IN TOUCH</b></a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav"  style="left:0;">
+        
+        
+            <li class="nav-item" id="signin" style="display: inline;">
+                <div class="btn-group" style="">				
+					<button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							 ><b>Sign In</b></button>
+						
+					<div class="dropdown-menu pull-left"> 
+						<a class="dropdown-item" href="/planning/login/">Log In</a> 
+						<div class="dropdown-divider"></div>
+
+						<a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
+					</div>
+				</div>
+            </li>
+    </ul>
+</nav>
+
+<script>
+$(document).ready(function(){
+		$("#flip").click(function(){
+			$("#panel").slideToggle("slow");
+			$(this).css({"background-color":"black","color":"white"})
+		});
+		});
+$(document).ready(function(){
+	$("#custom").click(function(){
+		$(".column4").show();
+		$("#build").show();
+	});	
+});
+
+$(document).ready(function(){
+	$("#build").click(function(){
+		$(".column4").hide();
+		$("#build").hide();
+	});	
+});
+</script>
+<script>
+$(document).ready(function(){
+
+    $("#dbd").click(function(){
+        $("#schedule1").text("Day by Day");
+    });
+    
+    $("#smap").click(function(){
+        $("#schedule1").text("Show Place os Map");
+    });
+
+});
+</script>
+
+    <div class="container">
+    <br><br>
+
+        <form action="planning/deletefunction/" method="post">
+        <div  class="mybold-text" ><b>&nbsp;&nbsp;&nbsp;{{pack_days}} days in {{city}}</b>
+        {%csrf_token%}
+        
+        <button id="build" onClick= "ShowList()" name="show" value="show" class="btn btn-sm btn-outline-light" style="display:none; float:right;"> Build New Customized Itinenary </button>
+            <input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
+        <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
+        <input type="hidden" name="addplacelist" id="addplacelist" value="fruitsalad">
+
+      </form>
+      
+    </div>
+
+    <div id="panel" style="text-align:center;">
+        <button class="btn btn-dark"> Save This Itinerary </button>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-dark"> Download This Itinerary </button>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-dark" id="custom"> Customize This Itinerary </button>&nbsp;&nbsp;&nbsp;
+    </div>
+    <br><br>
+
+    <div   style="text-align:center; padding-bottom:50px;">
+    <button style="align:center;" type="button" id="schedule" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+       <i class="fa fa-check"  aria-hidden="true"></i> <b><span id="schedule1" class="selection">Day By Day Plan</span><span class="caret"></span></b>
+    </button>
+    <ul class="dropdown-menu"  role="menu" style="text-align:center; padding-bottom:15px;" >
+        <li style="padding-bottom:3px;"> <a href="/planning/trip/" class="btn btn-default  btn-outline-light menuitems " id="dbd" > Day By Day Plan </a></li>
+        <li style="padding-bottom:3px;"> <a href="/planning/showmap/" class="btn btn-default  btn-outline-light menuitems" id="smap"> Show Places on Map </a></li>
+        <!-- <li style="padding:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems"> place 3 </a></li> -->
+    </ul>
+    </div>
+
+<div style="text-align:center;padding-top:80px; ">
+  <span class="mybold-text"> <b>JOURNEY DATE : </b> <br> <br> MARCH</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b> <span class="dot"> 20 </span> </b>
+  <b> <span class="dot"> 21 </span> </b>
+  <b> <span class="dot"> 22 </span> </b>
+  <b> <span class="dot"> 23 </span> </b>
+</div>
+
+    <div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
+    
+
+    
+<!-- footer -->
+<footer class="py-5">
+	<div class="container py-md-3">
+		<div class="row footer-grids pb-md-5 pb-3">	
+			<div class="col-md-3 col-sm-6 col-6">
+				<a href="#"> <i class="fa fa-phone"></i>Call Us</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6">
+				<a href="#"> <i class="fa fa-envelope"></i>Send Message</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-skype"></i>Skype Call</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-comment"></i>Online Chat</a>
+			</div>
+		</div>
+		
+		<div class="subscribe-grid text-center">
+			<p class="para three mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at placerat ante. Praesent nulla nunc, pretium dapibus efficitur in, auctor eget elit. Lorem ipsum dolor sit amet </p>
+			<h5>Subscribe for our latest updates</h5>
+			<p>Get
+				<span>10%</span> off on booking</p>
+			<form action="#" method="post">
+				<input class="form-control" type="email" placeholder="Subscribe" name="Subscribe" required="">
+				<button class="btn1">
+					<i class="fa fa-paper-plane"></i>
+				</button>
+			</form>
+		</div>
+	</div>
+</footer>
+<!-- //footer -->
+
+<style>
+.dot {
+  cursor:pointer;  
+  vertical-align:middle;
+  height: 50px;
+  width: 50px;
+  background-color: black;
+  color:white;
+
+  border:3px solid black;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot:hover{
+    background-color: white;
+    color:black;
+}
+
+#sample{
+  margin:0 auto;
+  border: 3px solid grey;
+  margin-top:80px;
+  width:600px;
+  margin-bottom:80px;
+  position:relative;
+  height:420px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#schedule{
+    border-radius: 25px;
+    content:justify;
+    width:250px;
+    height:50px;
+    color:white;
+    background-color:#ffa31a;
+    
+}
+.menuitems{
+    margin-left:25px;
+    border-radius: 25px;
+    
+    content:justify;
+    width:200px;
+    height:40px;
+    border:2px solid #ffa31a;
+    color:black;
+    background-color:white;
+    
+}
+.menuitems:hover{
+    border:2px solid #ffa31a;
+    color:white;
+    background-color:#ffa31a;
+    
+}
+
+
+    #panel, #flip {
+        padding: 5px;
+        text-align: left;
+        background-color: #000000;
+        color:#ffffff;
+        border: solid 3px #000000;
+        cursor:pointer;
+}
+#flip:hover{
+	cursor:pointer;
+	background-color: #2f2f2f;
+	color:#ffffff;
+    border: solid 3px #000000;
+}
+
+.mybold-text{
+	font-family:"verdana";
+	font-size: 22px;
+}
+
+#panel {
+    padding: 50px;
+    display: none;
+    background:#ffad33;
+    opacity:0.8;
+}
+
+</style>

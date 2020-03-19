@@ -12,9 +12,6 @@
 	  var destinationplace = "";
          function loadMap() {
 			
-			console.log()
-			
-			console.log()
             var mapOptions = {
                center:new google.maps.LatLng(19.373341, 78.662109),
                zoom:7
@@ -29,6 +26,27 @@
             });
 			{% endfor %}
          }
+		 
+		 function setOriginPlace(value)
+		 {
+			originplace = value;
+			console.log(originplace);
+		 }
+		 
+		 function setLink(value)
+		 {
+			var orplace = originplace.replace(/\s/g,'%20');
+			var desplace = destinationplace.replace(/\s/g,'%20');
+		    var totallink = "https://www.google.com/maps/dir/?api=1&origin="+orplace+"&destination="+desplace+"&travelmode=driving";
+			console.log(totallink);
+			$("#linkformap"+value).attr("href",totallink);
+		 }
+		 
+		 
+		 function setDestinationPlace(value)
+		 {
+			destinationplace = value;
+		 }
 		 
 		 function Description(i)
 		 {
@@ -69,6 +87,17 @@
 					$("#spanline"+r).remove();
 
 					console.log("Dipesh : " + deleteplacelist+" span id = "+"span"+r);
+		 }
+		 var count = 0;
+		 
+		 function writeDate(r)
+		 {
+				//console.log("{{istart}}");
+				var currentdate = new Date("{{istart}}");
+				var nowdate = new Date();
+				nowdate.setDate(currentdate.getDate() + count);
+				count = count + 1;
+				document.getElementById("currentDate"+r).innerHTML = nowdate; 
 		 }
 		 
 		 function add_place(r)
@@ -189,6 +218,8 @@
         </div>
       </li>
     </ul>
+
+
 </nav>
 
 
@@ -276,7 +307,7 @@ $(document).ready(function(){
 
 	<form action="planning/deletefunction/" method="post">
       <div id="flip" class="mybold-text" ><b>&nbsp;&nbsp;&nbsp;{{pack_days}} days in {{city}}</b>
-	  {%csrf_token%}
+	  <!-- {%csrf_token%} -->
 	  <button id="build" onClick= "ShowList()" name="show" value="show" class="btn btn-sm btn-outline-light" style="display:none; float:right;"> Build New Customized Itinenary </button>
 		<input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
 	  <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
@@ -308,16 +339,40 @@ $(document).ready(function(){
 
 
 
-<p id="rcorners1"><b style="Vertical-align:middle;">Day, Date</b></p>
+<div   style="text-align:center; padding-bottom:50px;">
+  <button style="text-align:center;" type="button" id="schedule" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+     <i class="fa fa-check"  aria-hidden="true"></i> <b><span id="schedule1" class="selection">Day By Day Plan</span><span class="caret"></span></b>
+  </button>
+  <ul class="dropdown-menu"  role="menu" style="text-align:center; padding-bottom:15px;" >
+      <li style="padding-bottom:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems " id="dbd" > Day By Day Plan </a></li>
+      <li style="padding-bottom:3px;"> <a href="/planning/showmap/" class="btn btn-default  btn-outline-light menuitems" id="smap"> Show Places on Map </a></li>
+      <!-- <li style="padding:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems"> place 3 </a></li> -->
+  </ul>
+  </div>
+
+
 <span class="vl"></span><br>
 <b style="margin-bottom:0px; margin-left:40px; font-size:25px;">
  {{city}}
 </b>
-
 <br>
+
 <!-- <div class="vl"></div> -->
+
+
 {% for obj in mainlist %}
 <br>
+
+
+	{%if forloop.counter0|divisibleby:"5"%}
+ 
+	<p id="rcorners1"><b id = "currentDate{{forloop.counter}}" style="Vertical-align:middle;"></b></p>
+	
+	<script>
+		writeDate({{forloop.counter}});
+	</script>
+
+	{% endif %}
 	<span class="vl" id="span{{forloop.counter}}">
 	
 		<script>
@@ -334,12 +389,13 @@ $(document).ready(function(){
 			setOriginPlace("{{obj.p_name}}")
 		</script>
 	</span>
-	<span class="vl" id="spanline{{forloop.counter}}"></span>
+  <span class="vl" id="spanline{{forloop.counter}}"></span>
+  
 		<div class="row" style="margin-top:0px;">
 		
 			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
 
-				<div class="column1"><i> {{durstart}} - {{durend}} </i></div>
+				<div class="column1"> Start ane end time batavase </div>
 
 				<div class="column2">
 					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
@@ -372,6 +428,7 @@ $(document).ready(function(){
 		</div>
 			
 {% endfor %}
+
 <br><br><br>
 		<h3 style=" font-family:verdana; margin:2px; padding:2px; height:65px; vertical-align:middle;"><b>OTHER INTERESTING PLACES TO VISIT IN {{city}}</b></h3>
 		
@@ -402,42 +459,44 @@ $(document).ready(function(){
 
 <div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
 
-<!-- footer -->
-<footer class="py-5">
-	<div class="container py-md-3">
-		<div class="row footer-grids pb-md-5 pb-3">	
-			<div class="col-md-3 col-sm-6 col-6">
-				<a href="#"> <i class="fa fa-phone"></i>Call Us</a>
-			</div>
-			<div class="col-md-3 col-sm-6 col-6">
-				<a href="#"> <i class="fa fa-envelope"></i>Send Message</a>
-			</div>
-			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
-				<a href="#"> <i class="fa fa-skype"></i>Skype Call</a>
-			</div>
-			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
-				<a href="#"> <i class="fa fa-comment"></i>Online Chat</a>
-			</div>
-		</div>
-		
-		<div class="subscribe-grid text-center">
-			<p class="para three mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at placerat ante. Praesent nulla nunc, pretium dapibus efficitur in, auctor eget elit. Lorem ipsum dolor sit amet </p>
-			<h5>Subscribe for our latest updates</h5>
-			<p>Get
-				<span>10%</span> off on booking</p>
-			<form action="#" method="post">
-				<input class="form-control" type="email" placeholder="Subscribe" name="Subscribe" required="">
-				<button class="btn1">
-					<i class="fa fa-paper-plane"></i>
-				</button>
-			</form>
-		</div>
-	</div>
-</footer>
-<!-- //footer -->
-
-
-
+<!-- <form action="planning/deletefunction/" method="post">
+      {%csrf_token%}
+	  
+	  <input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
+	  <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
+	  <input type="hidden" name="addplacelist" id="addplacelist" value="fruitsalad">
+	  <button onClick= "ShowList()" name="show" value="show">Build Customized Itinenary</button>
+</form> -->
+</div>
+<!--
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 2</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 4</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 3</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+-->
 <style>
 /* FOR DAY BY DAY PLAN MENU */
 #schedule{
@@ -706,8 +765,6 @@ img {
 }
 </style>
 </div>
-
-<div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
 </body>
 
 </html>

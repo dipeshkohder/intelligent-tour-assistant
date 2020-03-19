@@ -30,11 +30,15 @@ from sys import maxsize
 from math import radians, cos, sin, asin, sqrt
 import ast
 import pickle
+import itertools
 
 
 
 OptimizedItinerary = []
 SuggestionList = []
+istart = " "
+pack_days = 0
+mainobject = None
 
 def index(request):
 	return HttpResponse("hello World!! Django is unchained!")
@@ -175,6 +179,8 @@ def trip(request):
 		print("Enter City Name : ",end = '')
 		location_name = request.POST.get('place','')
 		start = request.POST.get('startdate','')
+		activitypreferences = request.POST.get('activitypreferences','')
+		
 		#fstart = datetime.datetime.strptime(start, "%Y-%m-%d").date()
 		format_str = '%m/%d/%Y'
 		trip_start = datetime.datetime.strptime(start,format_str).date()
@@ -201,7 +207,9 @@ def trip(request):
 		#trip_end = datetime.datetime(2020,1,30) # pela -> yy |  then ->  mm  | then -> dd
 		
 		pack_night = (trip_end - trip_start).days
+		global pack_days
 		pack_days = ((trip_end - trip_start) + timedelta(0,86400)).days # 1 divas add karo expicitly
+		print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(pack_days))
 		
 		travel_time = 30*60 #assuming for now, 30 minutes to reach from one place to another
 		end_time=start_time
@@ -213,9 +221,28 @@ def trip(request):
 		version = '20120610'
 		limit = 100
 
+		category='4bf58dd8d48988d181941735'
+		
 		print('Enter radius : ',end = '')
 		location_radius = int(request.POST.get('radius',''))
-		category='4bf58dd8d48988d181941735'
+		if activitypreferences == "monument" :
+			category='4bf58dd8d48988d12d941735'
+		elif activitypreferences == "culture":
+			category = '52e81612bcbc57f1066b7a32'
+		elif activitypreferences == "adventure":
+			category = '4eb1d4d54b900d56c88a45fc'
+		elif activitypreferences == "spritual":
+			category = '4bf58dd8d48988d131941735'
+		elif activitypreferences == "professional":
+			category = '4d4b7105d754a06375d81259'
+		elif activitypreferences == "mountain":
+			category = '4eb1d4d54b900d56c88a45fc'
+		elif activitypreferences == "beach":
+			category = '4bf58dd8d48988d1e2941735'
+		elif activitypreferences == "museum":
+			category = '4bf58dd8d48988d181941735'
+
+			
 		url = 'https://api.foursquare.com/v2/venues/explore?&client_id={}&client_secret={}&v={}&ll={},{}&radius={}&limit={}&sortByDistance={}&categoryId={}'.format(
 			client_id, 
 			client_secret, 
@@ -243,6 +270,7 @@ def trip(request):
 				
 				if curr_day <= pack_days:
 					
+					global mainobject
 					mainobject = Place_Info()
 					
 					print("=====  DAY ",curr_day," of ",pack_days,"=======")
@@ -448,7 +476,7 @@ def trip(request):
 				print('******************************************************************************************')
 					
 			except:
-				# main_list.append(mainobject)
+				#main_list.append(mainobject)
 				pass
 		
 		global OptimizedItinerary
@@ -458,29 +486,63 @@ def trip(request):
 			
 		s = 0
 		print("hii2")
-		OptimizedItinerary,min_distance = travellingSalesmanProblem(main_list, s)
+		#OptimizedItinerary,min_distance = travellingSalesmanProblem(main_list, s)
 
 
 
-		print("OptimizedItinerary has distance : ",min_distance)
-		for place in OptimizedItinerary:
-			print(place.p_name)
-		print("--- DELETION ---")
-		flag = 0
-		while( flag != 999 ):
+		# print("OptimizedItinerary has distance : ",min_distance)
+		# for place in OptimizedItinerary:
+			# print(place.p_name)
+		# print("--- DELETION ---")
+		# flag = 0
+		# while( flag != 999 ):
 				
-			flag = int(input("Enter index of place to delete : enter 999 to exit "))
+			# flag = int(input("Enter index of place to delete : enter 999 to exit "))
 
-			if flag != 999:
-				del OptimizedItinerary[flag]
-				OptimizedItinerary,min_distance = travellingSalesmanProblem(OptimizedItinerary, s)
-			for name in OptimizedItinerary:
-				print("After Deleting  : ",name.p_name," Distance : ",min_distance)
+			# if flag != 999:
+				# del OptimizedItinerary[flag]
+				# OptimizedItinerary,min_distance = travellingSalesmanProblem(OptimizedItinerary, s)
+			# for name in OptimizedItinerary:
+				# print("After Deleting  : ",name.p_name," Distance : ",min_distance)
 
 			# print('******************************************************************************************')
 	
 		#print(main_list)
-		return render(request,"map_page.html",{'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'start':trip_start,'end':trip_end,'pack_days':pack_days,'pack_night':pack_night,'mainlist':OptimizedItinerary,'suggestionList' : SuggestionList})
+		
+		
+		
+		#####################################CODE FOR MAKING OptimizedItinerary FOR DIFFERENT DAYS#############################################
+			
+			
+		
+		split_list = []
+			
+		split_index = 0
+		for i in range(pack_days):
+			split_list.append(split_index + 5)
+			split_index = split_index + 5
+			
+			
+		splited_optimizedItinenary = [main_list[i : j] for i, j in zip([0] + split_list, split_list + [None])] 
+		
+		#print(str(splited_optimizedItinenary))
+		
+		OptimizedItineraryWithSplited = []
+		for RandomItinenary in splited_optimizedItinenary:
+			if len(RandomItinenary) >= 3:
+				Itinenary,min_distance = travellingSalesmanProblem(RandomItinenary,0)
+				OptimizedItineraryWithSplited.append(Itinenary)
+
+		OptimizedItinerary = itertools.chain.from_iterable(OptimizedItineraryWithSplited)
+		
+		
+		#######################################################################################################################################
+		
+		global istart
+		istart = request.POST.get('startdate','')
+		
+		print(type(istart))
+		return render(request,"map_page.html",{'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'end':trip_end,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList})
 		
 		
 def homepage(request):
@@ -574,3 +636,15 @@ def adduser_info(request):
 def myaccount(request):
 
 	return render(request,'myaccount.html')
+	
+	
+def showIndividualmap(request):
+
+	pack_days_string = []
+	for i in range(0,pack_days):
+		pack_days_string.append(0)
+		
+	focuslnt = mainobject.p_lat
+	focuslng = mainobject.p_long
+		
+	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days,'OptimizedItinerary' : OptimizedItinerary,'focuslng':focuslng,'focuslnt':focuslnt})

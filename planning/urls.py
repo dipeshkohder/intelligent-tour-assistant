@@ -1,6 +1,6 @@
 
 from django.urls import path
-from planning.views import login,adduser_info,trip,homepage,distance,travellingSalesmanProblem,next_permutation,deletefunction,auth_view,signup,myaccount
+from planning.views import login,adduser_info,trip,homepage,distance,travellingSalesmanProblem,next_permutation,deletefunction,auth_view,signup,showIndividualmap,myaccount
 from . import views
 from django.conf.urls import url
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
  url(r'^signup/$',signup),
  url(r'^adduser/$',adduser_info),
  url(r'^myaccount/$',myaccount),
+ url(r'^showmap/$',showIndividualmap),
  #url(r'^show/$',show),
 ]

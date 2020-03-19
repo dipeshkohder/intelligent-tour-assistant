@@ -9,25 +9,26 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> <!-- Style-CSS --> 
 
       <script type="text/javascript">
-	  var deleteplacelist = new Array();
-	  var addplacelist = new Array();
-         function loadMap() {
+
+         function loadMap(start,end) {
+
 			
-			console.log()
-			
-			console.log()
+
             var mapOptions = {
-               center:new google.maps.LatLng(19.373341, 78.662109),
-               zoom:7
+               center:new google.maps.LatLng({{focuslnt}}, {{focuslng}}),
+               zoom:13
             }
 			
             var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
-			{% for obj in objects.response.groups.0.items %}
-			
-            var marker = new google.maps.Marker({
-               position: new google.maps.LatLng({{obj.venue.location.lat}},{{obj.venue.location.lng}}),
-               map: map,
-            });
+			{% for obj in OptimizedItinerary %}
+				//console.log({{forloop.counter}});
+				var counter = {{forloop.counter}};
+				if(counter >= start && counter <= end)
+				{
+					var marker = new google.maps.Marker({
+					position: new google.maps.LatLng({{obj.p_lat}},{{obj.p_long}}),
+					map: map,});
+				}
 			{% endfor %}
          }
 		 
@@ -44,22 +45,6 @@
 				document.getElementById("dot"+r).innerHTML = nowdate.getDate().toString()+ " " +months[nowdate.getMonth()]; 
 		 }
 		 
-		 
-		 function Description(i)
-		 {
-			{% for i in list %}
-				console.log(" i : ",{{list.i}});
-			{% endfor %}
-		
-		 }
-
-		 function ShowList()
-		 {
-				//To assign the deleteplacelist
-				document.getElementById('deleteplacelist').value = deleteplacelist.toString();
-				document.getElementById('addplacelist').value = addplacelist.toString();
-		 }
-		
 		
 		</script>
 
@@ -225,7 +210,7 @@ $(document).ready(function(){
   
   
   {% for i in pack_days_string %}
-		<b> <span class="dot" id="dot{{forloop.counter}}"></span> </b>
+		<b> <span class="dot" id="dot{{forloop.counter}}" onClick= "loadMap({{forloop.counter0}}*5 + 1,{{forloop.counter}}*5)" ></span> </b>
 		<script>
 			writeDate({{forloop.counter}})
 		</script>

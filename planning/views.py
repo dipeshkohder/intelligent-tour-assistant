@@ -38,6 +38,7 @@ OptimizedItinerary = []
 SuggestionList = []
 istart = " "
 pack_days = 0
+mainobject = None
 
 def index(request):
 	return HttpResponse("hello World!! Django is unchained!")
@@ -269,6 +270,7 @@ def trip(request):
 				
 				if curr_day <= pack_days:
 					
+					global mainobject
 					mainobject = Place_Info()
 					
 					print("=====  DAY ",curr_day," of ",pack_days,"=======")
@@ -638,4 +640,7 @@ def showIndividualmap(request):
 	for i in range(0,pack_days):
 		pack_days_string.append(0)
 		
-	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days})
+	focuslnt = mainobject.p_lat
+	focuslng = mainobject.p_long
+		
+	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days,'OptimizedItinerary' : OptimizedItinerary,'focuslng':focuslng,'focuslnt':focuslnt})

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	
+  <title>Trip Planner</title>
+  <script src =  "https://maps.googleapis.com/maps/api/js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> <!-- Style-CSS --> 
+
+      <script type="text/javascript">
+	  var deleteplacelist = new Array();
+	  var addplacelist = new Array();
+         function loadMap() {
+			
+			console.log()
+			
+			console.log()
+            var mapOptions = {
+               center:new google.maps.LatLng(19.373341, 78.662109),
+               zoom:7
+            }
+			
+            var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
+			{% for obj in objects.response.groups.0.items %}
+			
+            var marker = new google.maps.Marker({
+               position: new google.maps.LatLng({{obj.venue.location.lat}},{{obj.venue.location.lng}}),
+               map: map,
+            });
+			{% endfor %}
+         }
+		 
+		 function Description(i)
+		 {
+			{% for i in list %}
+				console.log(" i : ",{{list.i}});
+			{% endfor %}
+		
+		 }
+
+		 function ShowList()
+		 {
+				//To assign the deleteplacelist
+				document.getElementById('deleteplacelist').value = deleteplacelist.toString();
+				document.getElementById('addplacelist').value = addplacelist.toString();
+		 }
+		
+		
+		</script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+ 
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  
+    <nav class="navbar navbar-expand-sm navbar-dark " style="height: 275px; background-image: url('/static/img/banner1.jpg'); background-repeat: no-repeat; background-size:cover;overflow: hidden; background-position: center; " >
+      <!-- <img src="banner1.jpg" style=" width: 100%; background-repeat: no-repeat; background-size:cover;overflow: hidden; background-position: center; ">   -->
+      <a class="navbar-brand" href="#" style="padding-left:15px;">
+            <img src="../../assets/images/logo2.png" alt="Logo" style="width:40px;height: 40px;">
+        </a>
+        <h3 class="myglow" >
+          <b>ESCAPE</b> PLAN
+        </h3>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+           <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navb">
+            <ul class="navbar-nav mr-auto">
+    
+            </ul>
+    
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
+                        aria-hidden='true'></i> &nbsp;<b>SEARCH</b></button>
+            </form>
+        </div>
+    </nav>
+  
+<!-- niche wala( blue ) header starts -->
+
+
+<nav class="navbar navbar-expand-sm  justify-content-center sticky-top"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px; background-color:white;">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navb">
+        <ul class="navbar-nav " style="margin-top:15px;">
+            
+
+            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../Home"  style="cursor: pointer;"><b>HOME</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a  class="nav-link" routerLink="../Friends" onclick="window.location.href='../Friends'"  style="cursor: pointer;"><b>DASHBOARD</b></a>
+            </li>
+            
+
+            <a class="navbar-brand" href="#" style="padding-left:50px;">
+                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
+            </a>
+
+            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                <a class="nav-link" routerLink="../MeetOurTeam" style="cursor: pointer;"><b>MEET OUR TEAM</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../ContactUs" style="cursor: pointer;"><b>GET IN TOUCH</b></a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav"  style="left:0;">
+        
+        
+            <li class="nav-item" id="signin" style="display: inline;">
+                <div class="btn-group" >				
+					<button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							 ><b>Sign In</b></button>
+						
+					<div class="dropdown-menu pull-left"> 
+						<a class="dropdown-item" href="/planning/login/">Log In</a> 
+						<div class="dropdown-divider"></div>
+
+						<a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
+					</div>
+				</div>
+            </li>
+    </ul>
+<!-- src="{%static 'img/bkg2.jpg'}" -->
+        <ul class="navbar-nav"  style="left:0;">
+          <li class="nav-item" id="signin" style="display: inline;">
+              <div class="btn-group" >				
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            ><b>(( USERNAME ))</b></button>
+          
+        <div class="dropdown-menu pull-left"> 
+          <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
+          <div class="dropdown-divider"></div>
+
+          <a class="dropdown-item" href="/planning/signup/">Logout</a> 
+        </div>
+      </div>
+          </li>
+    </ul>
+
+</nav>
+
+
+
+<div class="container" style="margin-top:50px;text-align: center;">
+        <div style="margin: 50px;">
+            <h2><i class="fa fa-user" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;My Profile</h2>
+        </div>
+</div>
+
+<div class="container" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);margin-bottom: 50px; background-color: black; color:white;">
+    
+    <br>
+    <!-- Nav pills -->
+    <ul class="nav nav-pills nav-justified" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="pill" href="#details">Personal Details</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#upcoming">My Upcoming Trips</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#past">Past Trips</a>
+      </li>
+    </ul>
+  
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div id="details" class="container tab-pane active parallax" style="margin-bottom: 50px;padding-bottom: 50px;"><br>
+        <h3 class="myglow">Personal Details</h3>
+        <form>
+          {% csrf_token %}
+          <div class="form-group row" style="margin-top: 30px; ">
+            <label  class="col-4 col-form-label con" >Username </label> 
+            <div class="col-8">
+              <div class="input-group patti">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input  placeholder="Ex: tiger_scott" value="dhairya_here"  type="text" required="required" class="form-control"> 
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text">.00</div>
+                </div> -->
+              </div>
+
+              <span id="splitHelpBlock" class="form-text" style="margin-top: 10px;color:white;">Must be unique !</span>
+            </div>
+          </div>
+
+          <div class="form-group row" style="margin-top: 30px;">
+            <label  class="col-2 col-form-label con" >First Name </label> 
+            <div class="col-4">
+              <div class="input-group patti">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-id-badge" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input  placeholder="Ex: Tiger_Scott21" value="Tiger" type="text" required="required" class="form-control"> 
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text">.00</div>
+                </div> -->
+              </div>
+            </div>
+             
+            <label  class="col-2 col-form-label con" style="width:15px;" >Last Name </label> 
+            <div class="col-4">
+              <div class="input-group patti" >
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-id-badge" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input   placeholder="Ex: Scott" value="Scott" type="text" required="required" class="form-control"> 
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text">.00</div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" style="margin-top: 30px;">
+            <label  class="col-4 col-form-label con" >Email </label> 
+            <div class="col-8">
+              <div class="input-group patti">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input  placeholder="Ex: tigerscott23@abc.com" value="dhairya2308@gmail.com"  type="email" required="required" class="form-control"> 
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text">.00</div>
+                </div> -->
+              </div>
+
+              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
+            </div>
+          </div>
+
+          <div class="form-group row" style="margin-top: 30px;">
+            <label  class="col-4 col-form-label con" >Password </label> 
+            <div class="col-8">
+              <div class="input-group patti">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input  placeholder="Lock to your treasure :)" value="TopSecret"  type="password" required="required" class="form-control"> 
+                <div class="input-group-append" title=" Show Password " style="background-color: black">
+                  <i class="fa fa-eye" aria-hidden="true" style="width: 40px; text-align: center; margin-top: 10px;"></i>
+                </div>
+              </div>
+
+              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
+            </div>
+          </div>
+
+          <div class="form-group row" style="margin-top: 30px;">
+            <label  class="col-4 col-form-label con" >Contact No. </label> 
+            <div class="col-8">
+              <div class="input-group patti">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                  </div>
+                </div> 
+                <input  placeholder="10-digit Contact Number" value="9898987898"  type="tel" required="required" class="form-control"> 
+                </div> -->
+              </div>
+
+              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
+            </div>
+          
+          <div class="form-group row" style="margin-top: 30px;">
+            <label class="col-4 col-form-label con" >Gender</label> 
+            <div class="col-8">
+              <div class="form-check-inline">
+                <label class="form-check-label con" for="male"> MALE</label> &nbsp;&nbsp;&nbsp;
+                <input type="radio" class="form-check-input" id="male" name="gender" value="male">
+              
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label con" for="female"> FEMALE</label> &nbsp;&nbsp;&nbsp;
+              <input type="radio" class="form-check-input" id="female" name="gender" value="female">
+            
+          </div>
+     
+            </div>
+          </div>
+
+          <div class="form-group row"style="margin-top: 30px; ">
+            <div class="offset-5 col-7">
+              <button name="submit" type="submit" class="btn btn-outline-light" >Update Details</button>
+            </div>
+          </div>
+
+
+        </form>
+        <br><br>
+      </div>
+
+      <div id="upcoming" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
+        <h3 class="myglow">Upcoming Trips</h3>
+            <br><br>
+
+            <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+                <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+                    
+                    <div class="column3">
+                        <div class="wine-text-container" style="text-align: center;">
+                            
+                            <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                                
+                                <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                                <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                                
+                                <br>
+                                <div class="row" style="text-align: center; margin-left: 100px;">
+                                <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                                </button>
+                                </div>
+                        </div>
+                    </div>	
+    
+                    <div class="column4" >
+                        <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
+                         <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+                    </div>
+    
+                </div>
+                    
+            </div>
+
+            <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+              <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+                  
+                  <div class="column3">
+                      <div class="wine-text-container" style="text-align: center;">
+                          
+                          <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                              
+                              <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                              <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                              
+                              <br>
+                              <div class="row" style="text-align: center; margin-left: 100px;">
+                              <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                              </button>
+                              </div>
+                      </div>
+                  </div>	
+  
+                  <div class="column4" >
+                      <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
+                       <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+                  </div>
+  
+              </div>
+                  
+          </div>
+
+          <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+            <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+                
+                <div class="column3">
+                    <div class="wine-text-container" style="text-align: center;">
+                        
+                        <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                            
+                            <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                            <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                            
+                            <br>
+                            <div class="row" style="text-align: center; margin-left: 100px;">
+                            <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                            </button>
+                            </div>
+                    </div>
+                </div>	
+
+                <div class="column4" >
+                    <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
+                     <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+                </div>
+
+            </div>
+                
+        </div>
+
+        
+      </div>
+
+      <div id="past" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;" ><br>
+        <h3 class="myglow">Past Trips</h3>
+        
+        <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+          <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+              
+              <div class="column3">
+                  <div class="wine-text-container" style="text-align: center;">
+                      
+                      <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                          
+                          <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                          <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                          
+                          <br>
+                          <div class="row" style="text-align: center; margin-left: 100px;">
+                          <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                          </button>
+                          </div>
+                  </div>
+              </div>	
+
+              <div class="column4" >
+                  <!-- <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button> -->
+                   <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+              </div>
+
+          </div>
+              
+      </div>
+
+      <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+        <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+            
+            <div class="column3">
+                <div class="wine-text-container" style="text-align: center;">
+                    
+                    <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                        
+                        <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                        <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                        
+                        <br>
+                        <div class="row" style="text-align: center; margin-left: 100px;">
+                        <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                        </button>
+                        </div>
+                </div>
+            </div>	
+
+            <div class="column4" >
+                <!-- <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button> -->
+                 <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+            </div>
+
+        </div>
+            
+    </div>
+
+     <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+      <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+          
+          <div class="column3">
+              <div class="wine-text-container" style="text-align: center;">
+                  
+                  <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                      
+                      <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                      <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                      
+                      <br>
+                      <div class="row" style="text-align: center; margin-left: 100px;">
+                      <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                      </button>
+                      </div>
+              </div>
+          </div>	
+
+          <div class="column4" >
+              <!-- <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button> -->
+               <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
+          </div>
+
+      </div>
+          
+    </div>
+
+      </div>
+
+    </div>
+
+
+  </div><!--CONTAINER DIV ENDS HERE -shadow vadu-->
+  
+</body>
+<style>
+
+
+  .con{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 700;
+  }
+
+  .myglow{
+    color: white; 
+    font-family:Verdana, Geneva, Tahoma, sans-serif; 
+    color:white ; 
+    text-shadow: 0px 0px 10px #ffa31a; 
+    padding-top: 15px; 
+    font-weight: 900; 
+  }
+  .patti{
+    border:2px solid black;
+  }
+
+  .parallax {
+  /* The image used */
+  background-image: url("/static/img/bkg4.jpg");
+
+  /* Set a specific height */
+  min-height: 500px; 
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+    /* Trash Button mate */
+#del {
+	
+    background-color: black;
+    width:50px;
+      
+    border: none;
+    color: white;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  #del:hover {
+    background-color: white;
+    color:black;
+    border:2px solid black;
+  }
+
+  #edit {
+	width:300px;
+  background-color: black;
+  /* width:50px; */
+    
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#edit:hover {
+  background-color: white;
+  color:black;
+  border:2px solid black;
+}
+
+  /* position of trash button maate */
+  
+  .column1 {
+    float: left;
+    width: 5%;
+    padding: 10px;
+    
+  }
+  .column2 {
+    float: left;
+    width: 0%;
+    padding: 10px;
+    text-align:center;
+    
+  }
+  .column3 {
+    float: left;
+    width: 85%;
+    padding: 10px;
+    margin-left:20px;
+  }
+  .column4 {
+    float: left;
+    width: 10%;
+    padding: 10px;
+    
+  }
+  /* General bold text*/ 
+  .mybold-text{
+      font-family:"verdana";
+      font-size: 22px;
+  }
+  
+  
+  .mine-row {
+  display: flex;
+  flex-direction: row;
+  width:90%;
+  
+  padding: 10px 0;
+  margin: 25px auto;;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+.wine-text-container {
+	z-index:0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px;
+  padding:20px;
+}
+img {
+  margin-top:30px;
+  margin-bottom:30px;
+  margin-right:10px;
+  margin-left: 5px;
+  width:250px;
+
+  /* height: 150px; */
+}
+  
+</style>
+</html>

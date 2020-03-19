@@ -448,7 +448,7 @@ def trip(request):
 				print('******************************************************************************************')
 					
 			except:
-				main_list.append(mainobject)
+				# main_list.append(mainobject)
 				pass
 		
 		global OptimizedItinerary
@@ -570,3 +570,7 @@ def adduser_info(request):
 	t = user_details(username = uid, password=pas,first_name=fnam,last_name=lnam,email=emai,mo_no=mob)
 	t.save()
 	return render(request,"login.html")
+
+def myaccount(request):
+
+	return render(request,'myaccount.html')

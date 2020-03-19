@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+  <title>Trip Planner</title>
+  <script src =  "https://maps.googleapis.com/maps/api/js"></script>
+      
+      <script type="text/javascript">
+	  var deleteplacelist = new Array();
+	  var addplacelist = new Array();
+         function loadMap() {
+			
+			console.log()
+			
+			console.log()
+            var mapOptions = {
+               center:new google.maps.LatLng(19.373341, 78.662109),
+               zoom:7
+            }
+			
+            var map = new google.maps.Map(document.getElementById("sample"),mapOptions);
+			{% for obj in objects.response.groups.0.items %}
+			
+            var marker = new google.maps.Marker({
+               position: new google.maps.LatLng({{obj.venue.location.lat}},{{obj.venue.location.lng}}),
+               map: map,
+            });
+			{% endfor %}
+         }
+		 
+		 function Description(i)
+		 {
+			{% for i in list %}
+				console.log(" i : ",{{list.i}});
+			{% endfor %}
+		
+			
+		 }
+
+		 
+		 function delete_place(r)
+		 {
+					console.log(r)
+					deleteplacelist.push(r)
+					$("#"+r).remove();
+					console.log("Dipesh : " + deleteplacelist)
+		 }
+		 
+		 function add_place(r)
+		 {
+		 
+					console.log(r)
+					addplacelist.push(r)
+					$("#"+r).remove();
+					console.log("Dipesh : " + addplacelist)
+		 }
+		 
+		 function ShowList()
+		 {
+				//To assign the deleteplacelist
+				document.getElementById('deleteplacelist').value = deleteplacelist.toString();
+				document.getElementById('addplacelist').value = addplacelist.toString();
+		 }
+		
+      </script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body >
+
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="height: 60px;">
+    <a class="navbar-brand" href="#" style="padding-left:15px;">
+        <img src="../../assets/images/logo2.png" alt="Logo" style="width:40px;height: 40px;">
+    </a>
+    <h3 style="color: white; font-family:'Times New Roman', Times, serif; padding-top: 15px;"><b>ESCAPE</b> PLAN</h3>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+       <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navb">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
+                    aria-hidden='true'></i><b>SEARCH</b></button>
+        </form>
+    </div>
+</nav>
+<!-- niche wala( blue ) header starts -->
+
+
+<nav class="navbar navbar-expand-sm  justify-content-center"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px;">
+
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navb">
+        <ul class="navbar-nav " style="margin-top:15px;">
+            
+
+            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../Home"  style="cursor: pointer;"><b>HOME</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a  class="nav-link" routerLink="../Friends" onclick="window.location.href='../Friends'"  style="cursor: pointer;"><b>DASHBOARD</b></a>
+            </li>
+            
+
+            <a class="navbar-brand" href="#" style="padding-left:50px;">
+                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
+            </a>
+
+            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                <a class="nav-link" routerLink="../MeetOurTeam" style="cursor: pointer;"><b>MEET OUR TEAM</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" routerLink="../ContactUs" style="cursor: pointer;"><b>GET IN TOUCH</b></a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav">
+        
+        
+            <li class="nav-item" id="signin" style="display: inline;">
+                <button class="btn btn-outline-dark" style="margin-top:5px;" data-toggle="modal"
+                    data-target="#loginmodal"><b>Sign In</b></button>
+                <div class="modal fade shadow" id="loginmodal" style="border: 6px solid white;">
+                    <div class="modal-dialog  modal-md">
+                        <div class="modal-content shadow" style="border-radius:0px;">
+                            <div class="modal-header" style="border-style:none;">
+                                <h4 class="modal-title">Login</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="container"
+                                style="border-top: 1px solid gainsboro;border-bottom: 1px solid gainsboro;">
+                                <div class="g-signin2" style="width: 350px;margin-left:60px;margin-bottom:50px;"
+                                    data-onsuccess="onSignIn"></div>
+                            </div>
+                            <div class="container" style="border-bottom: 1px solid gainsboro;margin-bottom: 30px;">
+                                <!-- <div class="text-danger">{{ errormsg }}</div> -->
+                                <form >
+                                    <div class="form-group">
+                                        <label for="uname" class="text-align">Username:</label>
+                                        <input type="text" class="form-control" id="uname" placeholder="Enter username"
+                                            name="uname" formControlName="username">
+                                        <!-- <div class="text-danger">{{ erroruname }}</div> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Password:</label>
+                                        <input type="password" class="form-control" id="pwd"
+                                            placeholder="Enter password" name="password" formControlName="password">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary"
+                                        [disabled]="!formdata.valid">Submit</button>
+                                </form>
+                                <a id="register" class="text-primary"
+                                    style="background: transparent;border:none;cursor: pointer;">Don't
+                                    have an account?Create one</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </li>
+        
+    </ul>
+
+
+</nav>
+
+
+
+
+<!-- main content -->
+
+
+  <img src="home_bkg.jpg" alt="Snow" style="width:100%;height:600px; background-color: rgba(0, 0, 0, 0.5); background-size: cover; opacity:0.9;">
+  	<div class="home_bkg">
+		<h1><b>{{pack_days}} DAYS IN {{city}}</b></h1>
+	</div>
+	
+	<div class="home_bkg" style="margin-top:50px;">
+	
+		<h3><b>{{start}} - {{end}}</b></h3>
+ 	</div>
+
+<div class="container">
+    <b class="mybold-text">See / Edit route </b>
+<br>
+
+{% for obj in mainlist %}
+	
+		
+			
+			 
+			  <div class="row">
+				
+				<div class="mine-row" id="{{forloop.counter}}">
+				
+				
+					<img src="" alt="xyz">
+						<div class="wine-text-container">
+						<button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button>
+							
+							<h3><div>{{obj.p_name}}</div></h3>
+							<b> </b>
+							<br>
+							<div class="desc" id = "description"></div><br>
+							<b>ADDRESS : {{obj.p_address}}</b>
+							<b>Ratings : {{obj.p_ratings}}</b>
+							<b>Type  : {{obj.p_categorytype}}</b>
+							<b>Distance : {{obj.p_distance}}</b>
+							
+						</div>
+				</div>
+				
+			</div>
+			
+			
+		
+
+
+{% endfor %}
+
+		<h1 id="here">Suggested Place List</h1>
+		
+		
+		
+		{% for obj in suggestionList %}
+	
+		
+			
+			 
+			  <div class="row">
+				
+				<div class="mine-row" id="{{forloop.counter}}">
+				
+				
+					<img src="" alt="xyz">
+						<div class="wine-text-container">
+						<button class="btn-primary" onClick="add_place({{forloop.counter}})">ADD PLACE</button>
+							
+							<h3><div>{{obj.p_name}}</div></h3>
+							<b> </b>
+							<br>
+							<div class="desc" id = "description"></div><br>
+							<b>ADDRESS : {{obj.p_address}}</b>
+							<b>Ratings : {{obj.p_ratings}}</b>
+							<b>Type  : {{obj.p_categorytype}}</b>
+							<b>Distance : {{obj.p_distance}}</b>
+							
+						</div>
+				</div>
+				
+			</div>
+			
+			
+		
+
+
+{% endfor %}
+<div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
+
+<form action="planning/deletefunction/" method="post">
+      {%csrf_token%}
+	  
+	  <input type="hidden" name="customizedlist" id = "customizedlist" value='{{mainlist}}'>
+	  <input type="hidden" name="deleteplacelist" id = "deleteplacelist"  value="fruitsalad">
+	  <input type="hidden" name="addplacelist" id="addplacelist" value="fruitsalad">
+	  <button onClick= "ShowList()" name="show" value="show">Build Customized Itinenary</button>
+</form>
+</div>
+<!--
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 2</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 4</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="mine-row">
+    <img src="http://placehold.it/70x50">
+    <div class="wine-text-container">
+      <h3><div>PLACE 3</div></h3>
+      <div class="desc">The Taj Mahal  is an ivory-white marble mausoleum on the south bank of the Yamuna river in the Indian city of Agra. It was commissioned in 1632 by the Mughal emperor Shah Jahan (reigned from 1628 to 1658) to house the tomb of his favourite wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself. The tomb is the centrepiece of a 17-hectare (42-acre) complex, which includes a mosque and a guest house, and is set in formal gardens bounded on three sides by a crenellated wall. </div>
+    </div>
+  </div>
+</div>
+-->
+<style>
+.mybold-text{
+	font-family:"verdana";
+	font-size: 30px;
+}
+
+.home_bkg{
+	position: absolute;
+	top: 50%; 
+	left: 50%; 
+	transform: translate(-50%, -50%); 
+	font-family:verdana; 
+	color:white; 
+	text-shadow: 6px 6px 4px #000000;
+	white-space:nowrap;
+}
+img {
+  margin-top:30px;
+  margin-bottom:30px;
+  margin-right:10px;
+  margin-left: 5px;
+  width:250px;
+
+  /* height: 150px; */
+}
+#sample{
+  margin:0 auto;
+  border: 5px solid black;
+  padding:20px;
+  width:600px;
+  height:420px;
+}
+.mine-row {
+  display: flex;
+  flex-direction: row;
+  
+  padding: 10px 0;
+  margin: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.wine-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px;
+  padding:20px;
+}
+.desc{
+	text-align: justify;
+  width: 750px;
+}
+</style>
+</div>
+</body>
+
+</html>

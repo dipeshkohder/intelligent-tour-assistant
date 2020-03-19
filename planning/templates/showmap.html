@@ -5,7 +5,7 @@
   <title>Trip Planner</title>
   <script src =  "https://maps.googleapis.com/maps/api/js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
-
+{% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> <!-- Style-CSS --> 
 
       <script type="text/javascript">
@@ -30,6 +30,20 @@
             });
 			{% endfor %}
          }
+		 
+		 var count = 0;
+		 
+		 const months = ["Jan", "Feb", "March","Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		 function writeDate(r)
+		 {
+				console.log("{{istart}}");
+				var currentdate = new Date("{{istart}}");
+				var nowdate = new Date();
+				nowdate.setDate(currentdate.getDate() + count);
+				count = count + 1;
+				document.getElementById("dot"+r).innerHTML = nowdate.getDate().toString()+ " " +months[nowdate.getMonth()]; 
+		 }
+		 
 		 
 		 function Description(i)
 		 {
@@ -192,10 +206,13 @@ $(document).ready(function(){
     </div>
     <br><br>
 
+
     <div   style="text-align:center; padding-bottom:50px;">
     <button style="align:center;" type="button" id="schedule" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
        <i class="fa fa-check"  aria-hidden="true"></i> <b><span id="schedule1" class="selection">Day By Day Plan</span><span class="caret"></span></b>
     </button>
+	
+	
     <ul class="dropdown-menu"  role="menu" style="text-align:center; padding-bottom:15px;" >
         <li style="padding-bottom:3px;"> <a href="/planning/trip/" class="btn btn-default  btn-outline-light menuitems " id="dbd" > Day By Day Plan </a></li>
         <li style="padding-bottom:3px;"> <a href="/planning/showmap/" class="btn btn-default  btn-outline-light menuitems" id="smap"> Show Places on Map </a></li>
@@ -204,11 +221,16 @@ $(document).ready(function(){
     </div>
 
 <div style="text-align:center;padding-top:80px; ">
-  <span class="mybold-text"> <b>JOURNEY DATE : </b> <br> <br> MARCH</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b> <span class="dot"> 20 </span> </b>
-  <b> <span class="dot"> 21 </span> </b>
-  <b> <span class="dot"> 22 </span> </b>
-  <b> <span class="dot"> 23 </span> </b>
+  <span class="mybold-text"> <b>JOURNEY DATE : </b> <br> <br></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+  {% for i in pack_days_string %}
+		<b> <span class="dot" id="dot{{forloop.counter}}"></span> </b>
+		<script>
+			writeDate({{forloop.counter}})
+		</script>
+  {% endfor %}
+  
 </div>
 
     <div id = "sample" style = "width:580px; height:400px;"><button onClick= "loadMap()" name="map" value="map"></button></div>
@@ -253,8 +275,8 @@ $(document).ready(function(){
 .dot {
   cursor:pointer;  
   vertical-align:middle;
-  height: 50px;
-  width: 50px;
+  height: 30px;
+  width: 120px;
   background-color: black;
   color:white;
 

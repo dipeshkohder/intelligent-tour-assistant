@@ -36,6 +36,8 @@ import itertools
 
 OptimizedItinerary = []
 SuggestionList = []
+istart = " "
+pack_days = 0
 
 def index(request):
 	return HttpResponse("hello World!! Django is unchained!")
@@ -204,7 +206,9 @@ def trip(request):
 		#trip_end = datetime.datetime(2020,1,30) # pela -> yy |  then ->  mm  | then -> dd
 		
 		pack_night = (trip_end - trip_start).days
+		global pack_days
 		pack_days = ((trip_end - trip_start) + timedelta(0,86400)).days # 1 divas add karo expicitly
+		print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(pack_days))
 		
 		travel_time = 30*60 #assuming for now, 30 minutes to reach from one place to another
 		end_time=start_time
@@ -532,6 +536,7 @@ def trip(request):
 		
 		#######################################################################################################################################
 		
+		global istart
 		istart = request.POST.get('startdate','')
 		
 		print(type(istart))
@@ -629,4 +634,8 @@ def adduser_info(request):
 	
 def showIndividualmap(request):
 
-	return render(request,'showmap.html')
+	pack_days_string = []
+	for i in range(0,pack_days):
+		pack_days_string.append(0)
+		
+	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days})

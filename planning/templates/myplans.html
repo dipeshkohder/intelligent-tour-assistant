@@ -51,7 +51,8 @@
 		</script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
- 
+
+  <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> -->
  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -98,30 +99,31 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
+   
     <div class="collapse navbar-collapse justify-content-center" id="navb" >
-      <ul class="navbar-nav " style="margin-top:0px;">
-          
+        <ul class="navbar-nav " style="margin-top:0px;">
+            
 
-          <li class="nav-item " style="padding-left:35px;padding-top:10px;">
-              <a class="nav-link" href="/planning/home/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style="line-height: 55px;color:#ffa31a;cursor: pointer; "><b>HOME</b></a>
-          </li>
-          <li class="nav-item" style="padding-left:35px;padding-top:10px;">
-              <a  class="nav-link" href="/planning/myplans/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style="line-height: 55px;color:#ffa31a;cursor: pointer; "><b> MY ITINERARIES </b></a>
-          </li>
-          
+            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" href="/planning/home/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>HOME</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a  class="nav-link" href="/planning/myplans/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b> MY ITINERARIES </b></a>
+            </li>
+            
 
-          <a class="navbar-brand" href="#" style="padding-left:50px;">
-              <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
-          </a>
+            <a class="navbar-brand" href="#" style="padding-left:50px;">
+                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
+            </a>
 
-          <li class="nav-item" style="padding-left:26px;padding-top:10px;">
-              <a class="nav-link" href="/planning/about/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style="line-height: 55px;color:#ffa31a;cursor: pointer; "><b>MEET OUR TEAM</b></a>
-          </li>
-          <li class="nav-item" style="padding-left:35px;padding-top:10px;">
-              <a class="nav-link" href="/planning/contact/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style="line-height: 55px;color:#ffa31a;cursor: pointer; "><b>GET IN TOUCH</b></a>
-          </li>
-      </ul>
-  </div>
+            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                <a class="nav-link" href="/planning/about/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>MEET OUR TEAM</b></a>
+            </li>
+            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                <a class="nav-link" href="/planning/contact/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>GET IN TOUCH</b></a>
+            </li>
+        </ul>
+    </div>
     <ul class="navbar-nav"  style="left:0;">
         
         
@@ -139,7 +141,7 @@
 				</div>
             </li>
     </ul>
-<!-- src="{%static 'img/bkg2.jpg'}" -->
+
         <ul class="navbar-nav"  style="left:0;">
           <li class="nav-item" id="signin" style="display: inline;">
               <div class="btn-group" >				
@@ -163,166 +165,67 @@
 
 <div class="container" style="margin-top:50px;text-align: center;">
         <div style="margin: 50px;">
-            <h2><i class="fa fa-user" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;My Profile</h2>
+            <h2><i class="fa fa-user" aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;My Plans</h2>
         </div>
 </div>
 
 <div class="container" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);margin-bottom: 50px; background-color: black; color:white;">
     
     <br>
-<!--     
-    <ul class="nav nav-pills nav-justified" role="tablist" style="width: 300px;">
+    <!-- Nav pills -->
+    <ul class="nav nav-pills nav-justified" role="tablist">
+      
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="pill" href="#details">Personal Details</a>
+        <a class="nav-link active" data-toggle="pill" href="#upcoming">My Upcoming Trips</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="pill" href="#upcoming">My Upcoming Trips</a>
+        <a class="nav-link" data-toggle="pill" href="#current">Ongoing Trip Itinerary</a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link" data-toggle="pill" href="#past">Past Trips</a>
       </li>
     </ul>
-   -->
+  
     <!-- Tab panes -->
     <div class="tab-content">
-      <div id="details" class="container tab-pane active parallax" style="margin-bottom: 50px;padding-bottom: 50px;"><br>
-        <h3 class="myglow">Personal Details</h3>
-        <form>
-          {% csrf_token %}
-          <div class="form-group row" style="margin-top: 30px; ">
-            <label  class="col-4 col-form-label con" >Username </label> 
-            <div class="col-8">
-              <div class="input-group patti">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input  placeholder="Ex: tiger_scott" value="dhairya_here"  type="text" required="required" class="form-control"> 
-                <!-- <div class="input-group-append">
-                  <div class="input-group-text">.00</div>
-                </div> -->
-              </div>
+      <div id="current" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
+        <h3 class="myglow">Ongoing Trip Itinerary</h3>
+        <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+		
+            <div class="mine-row" id="ongoing{{forloop.counter}}" style="margin-top:0px;">
+                
+                <div class="column3">
+                    <div class="wine-text-container" style="text-align: center;">
+                        
+                        <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+                            
+                            <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
+                            <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                            
+                            <br>
+                            <div class="row" style="text-align: center; margin-left: 100px;">
+                            <button  class="mydisabled" title="You cannot do this now" style="width: 200px;color:whitesmoke; background-color:darkred;" disabled>  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                            </button>
+                            </div>
+                    </div>
+                </div>	
 
-              <span id="splitHelpBlock" class="form-text" style="margin-top: 10px;color:white;">Must be unique !</span>
-            </div>
-          </div>
-
-          <div class="form-group row" style="margin-top: 30px;">
-            <label  class="col-2 col-form-label con" >First Name </label> 
-            <div class="col-4">
-              <div class="input-group patti">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-id-badge" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input  placeholder="Ex: Tiger_Scott21" value="Tiger" type="text" required="required" class="form-control"> 
-                <!-- <div class="input-group-append">
-                  <div class="input-group-text">.00</div>
-                </div> -->
-              </div>
-            </div>
-             
-            <label  class="col-2 col-form-label con" style="width:15px;" >Last Name </label> 
-            <div class="col-4">
-              <div class="input-group patti" >
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-id-badge" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input   placeholder="Ex: Scott" value="Scott" type="text" required="required" class="form-control"> 
-                <!-- <div class="input-group-append">
-                  <div class="input-group-text">.00</div>
-                </div> -->
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row" style="margin-top: 30px;">
-            <label  class="col-4 col-form-label con" >Email </label> 
-            <div class="col-8">
-              <div class="input-group patti">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input  placeholder="Ex: tigerscott23@abc.com" value="dhairya2308@gmail.com"  type="email" required="required" class="form-control"> 
-                <!-- <div class="input-group-append">
-                  <div class="input-group-text">.00</div>
-                </div> -->
-              </div>
-
-              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
-            </div>
-          </div>
-
-          <div class="form-group row" style="margin-top: 30px;">
-            <label  class="col-4 col-form-label con" >Password </label> 
-            <div class="col-8">
-              <div class="input-group patti">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input  placeholder="Lock to your treasure :)" value="TopSecret"  type="password" required="required" class="form-control"> 
-                <div class="input-group-append" title=" Show Password " style="background-color: black">
-                  <i class="fa fa-eye" aria-hidden="true" style="width: 40px; text-align: center; margin-top: 10px;"></i>
+                <div class="column4" >
+                    <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
+                     <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
                 </div>
-              </div>
 
-              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
             </div>
-          </div>
+                
+        </div>
 
-          <div class="form-group row" style="margin-top: 30px;">
-            <label  class="col-4 col-form-label con" >Contact No. </label> 
-            <div class="col-8">
-              <div class="input-group patti">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">
-                    <i class="fa fa-phone" aria-hidden="true"></i>
-                  </div>
-                </div> 
-                <input  placeholder="10-digit Contact Number" value="9898987898"  type="tel" required="required" class="form-control"> 
-                </div> 
-              </div>
-
-              <!-- <span id="splitHelpBlock" class="form-text text-muted" style="margin-top: 10px;">Must be unique !</span> -->
-            </div>
-          
-          <div class="form-group row" style="margin-top: 30px;">
-            <label class="col-4 col-form-label con" >Gender</label> 
-            <div class="col-8">
-              <div class="form-check-inline">
-                <label class="form-check-label con" for="male"> MALE</label> &nbsp;&nbsp;&nbsp;
-                <input type="radio" class="form-check-input" id="male" name="gender" value="male">
-              
-          </div>
-          <div class="form-check-inline">
-            <label class="form-check-label con" for="female"> FEMALE</label> &nbsp;&nbsp;&nbsp;
-              <input type="radio" class="form-check-input" id="female" name="gender" value="female">
-            
-          </div>
-     
-            </div>
-          </div>
-
-          <div class="form-group row"style="margin-top: 30px; ">
-            <div class="offset-5 col-7">
-              <button name="submit" type="submit" class="btn btn-outline-light" >Update Details</button>
-            </div>
-          </div>
-
-
-        </form>
         <br><br>
       </div>
 
-      <div id="upcoming" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
+      <div id="upcoming" class="container tab-pane active parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
         <h3 class="myglow">Upcoming Trips</h3>
             <br><br>
 
@@ -588,12 +491,17 @@
   padding: 12px 16px;
   font-size: 16px;
   cursor: pointer;
+  border:2px solid black;
 }
 
 #edit:hover {
   background-color: white;
   color:black;
   border:2px solid black;
+}
+
+.mydisabled{
+    background-color:grey;
 }
 
   /* position of trash button maate */

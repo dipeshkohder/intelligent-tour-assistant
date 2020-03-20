@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
 	
@@ -93,15 +94,15 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-center" id="navb">
-        <ul class="navbar-nav " style="margin-top:15px;">
+    <div class="collapse navbar-collapse justify-content-center" id="navb" >
+        <ul class="navbar-nav " style="margin-top:0px;">
             
 
-            <li class="nav-item " style="padding-left:35px;padding-top:10px;">
-                <a class="nav-link" routerLink="../Home"  style="cursor: pointer;"><b>HOME</b></a>
+            <li class="nav-item " style="padding-left:35px;padding-top:0px;">
+                <a class="nav-link" href="/planning/home/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>HOME</b></a>
             </li>
-            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
-                <a  class="nav-link" routerLink="../Friends" onclick="window.location.href='../Friends'"  style="cursor: pointer;"><b>DASHBOARD</b></a>
+            <li class="nav-item" style="padding-left:35px;padding-top:0px;">
+                <a  class="nav-link" href="/planning/myplans/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b> MY ITINERARIES </b></a>
             </li>
             
 
@@ -109,11 +110,11 @@
                 <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
             </a>
 
-            <li class="nav-item" style="padding-left:26px;padding-top:10px;">
-                <a class="nav-link" routerLink="../MeetOurTeam" style="cursor: pointer;"><b>MEET OUR TEAM</b></a>
+            <li class="nav-item" style="padding-left:26px;padding-top:0px;">
+                <a class="nav-link" href="/planning/about/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>MEET OUR TEAM</b></a>
             </li>
-            <li class="nav-item" style="padding-left:35px;padding-top:10px;">
-                <a class="nav-link" routerLink="../ContactUs" style="cursor: pointer;"><b>GET IN TOUCH</b></a>
+            <li class="nav-item" style="padding-left:35px;padding-top:0px;">
+                <a class="nav-link" href="/planning/contact/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>GET IN TOUCH</b></a>
             </li>
         </ul>
     </div>
@@ -134,6 +135,23 @@
 				</div>
             </li>
     </ul>
+
+    <ul class="navbar-nav"  style="left:0;">
+        <li class="nav-item" id="signin" style="display: inline;">
+            <div class="btn-group" >				
+              <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          ><b>(( USERNAME ))</b></button>
+        
+      <div class="dropdown-menu pull-left"> 
+        <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
+        <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
+        <div class="dropdown-divider"></div>
+
+        <a class="dropdown-item" href="/planning/signup/">Logout</a> 
+      </div>
+    </div>
+        </li>
+  </ul>
 </nav>
 
 <script>
@@ -213,7 +231,7 @@ $(document).ready(function(){
   
   
   {% for i in pack_days_string %}
-		<b> <span class="dot" id="dot{{forloop.counter}}" onClick= "loadMap({{forloop.counter0}}*5 + 1,{{forloop.counter}}*5)" ></span> </b>
+        <b> <span class="dot" id="dot{{forloop.counter}}" onClick= "loadMap({{forloop.counter0}}*5 + 1,{{forloop.counter}}*5)" ></span> </b>
 		<script>
 			writeDate({{forloop.counter}})
 		</script>
@@ -267,9 +285,9 @@ $(document).ready(function(){
   width: 120px;
   background-color: black;
   color:white;
-
+  margin-right: 10px;  
   border:3px solid black;
-  border-radius: 50%;
+  border-radius: 25px;
   display: inline-block;
 }
 .dot:hover{

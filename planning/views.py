@@ -34,6 +34,7 @@ import itertools
 
 
 
+OptimizedItineraryForMap = []
 OptimizedItinerary = []
 SuggestionList = []
 istart = " "
@@ -535,7 +536,8 @@ def trip(request):
 
 		OptimizedItinerary = itertools.chain.from_iterable(OptimizedItineraryWithSplited)
 		
-		
+	
+		#main_list = OptimizedItinerary
 		#######################################################################################################################################
 		
 		global istart
@@ -636,15 +638,28 @@ def adduser_info(request):
 def myaccount(request):
 
 	return render(request,'myaccount.html')
-	
+
+def myplans(request):
+
+	return render(request,'myplans.html')
+
 	
 def showIndividualmap(request):
 
 	pack_days_string = []
 	for i in range(0,pack_days):
 		pack_days_string.append(0)
-		
+	 	
 	focuslnt = mainobject.p_lat
 	focuslng = mainobject.p_long
 		
 	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days,'OptimizedItinerary' : OptimizedItinerary,'focuslng':focuslng,'focuslnt':focuslnt})
+
+
+def about(request):
+
+	return render(request,'about.html')
+
+def contact(request):
+
+	return render(request,'contact.html')

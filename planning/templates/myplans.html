@@ -124,40 +124,41 @@
             </li>
         </ul>
     </div>
-    <ul class="navbar-nav"  style="left:0;">
-        
-        
-            <li class="nav-item" id="signin" style="display: inline;">
-                <div class="btn-group" >				
-					<button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-							 ><b>Sign In</b></button>
-						
-					<div class="dropdown-menu pull-left"> 
-						<a class="dropdown-item" href="/planning/login/">Log In</a> 
-						<div class="dropdown-divider"></div>
-
-						<a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
-					</div>
-				</div>
-            </li>
-    </ul>
-
-        <ul class="navbar-nav"  style="left:0;">
-          <li class="nav-item" id="signin" style="display: inline;">
-              <div class="btn-group" >				
-                <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            ><b>(( USERNAME ))</b></button>
-          
-        <div class="dropdown-menu pull-left"> 
+    {% if request.session.username %}
+	<ul class="navbar-nav"  style="left:0;">
+      <li class="nav-item" id="signin" style="display: inline;">
+          <div class="btn-group" >				
+            <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        ><b>{{request.session.username}}</b></button>
+      
+          <div class="dropdown-menu pull-left"> 
           <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
           <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
           <div class="dropdown-divider"></div>
-
-          <a class="dropdown-item" href="/planning/signup/">Logout</a> 
+            <a class="dropdown-item" href="/planning/logout/">Logout</a> 
+          </div>
         </div>
-      </div>
-          </li>
+      </li>
     </ul>
+	{% else %}
+	<ul class="navbar-nav">
+        
+        <li class="nav-item" id="signin" style="display: inline;">
+          <div class="btn-group">				
+					  <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							 ><b>Sign In</b></button>
+						
+					<div class="dropdown-menu"> 
+					<a class="dropdown-item" href="/planning/login/">Log In</a> 
+					<div class="dropdown-divider"></div>
+
+					  <a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
+					</div>
+				  </div>
+        </li>
+    </ul>
+	{% endif %}
+    
 
 </nav>
 
@@ -191,7 +192,8 @@
     <div class="tab-content">
       <div id="current" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
         <h3 class="myglow">Ongoing Trip Itinerary</h3>
-        <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
+        {%for obj in current%}
+		<div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
 		
             <div class="mine-row" id="ongoing{{forloop.counter}}" style="margin-top:0px;">
                 
@@ -200,15 +202,22 @@
                         
                         <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
                             
-                            <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                            <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                             <h3><div class="mybold_text">{{obj.pack_days}} days in {{obj.city}}</div></h3><br>
+                          <h4><div class="mybold_text">{{obj.start_date}} - {{obj.end_date}}</div></h4>
                             
                             <br>
                             <div class="row" style="text-align: center; margin-left: 100px;">
                             <button  class="mydisabled" title="You cannot do this now" style="width: 200px;color:whitesmoke; background-color:darkred;" disabled>  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                            <form action="/planning/viewitin/" method="post">
+							<input type="hidden" name="city" value='{{obj.city}}'>
+							<input type="hidden" name="packdays" value='{{obj.pack_days}}'>
+							<input type="hidden" name="start" value='{{obj.start_date}}'>
+							<input type="hidden" name="end" value='{{obj.end_date}}'>
+							<input type="hidden" name="uname" value='{{request.session.username}}'>
+							<button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
                             </button>
+							</form>
                             </div>
                     </div>
                 </div>	
@@ -221,14 +230,14 @@
             </div>
                 
         </div>
-
+{%endfor%}
         <br><br>
       </div>
 
       <div id="upcoming" class="container tab-pane active parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;"><br>
         <h3 class="myglow">Upcoming Trips</h3>
             <br><br>
-
+{% for obj in upcoming %}
             <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
 		
                 <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
@@ -238,16 +247,23 @@
                             
                             <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
                                 
-                                <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                                <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                                 <h3><div class="mybold_text">{{obj.pack_days}} days in {{obj.city}}</div></h3><br>
+                          <h4><div class="mybold_text">{{obj.start_date}} - {{obj.end_date}}</div></h4>
                                 
                                 <br>
                                 <div class="row" style="text-align: center; margin-left: 100px;">
                                 <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                                </button>
-                                </div>
+                                <form action="/planning/viewitin/" method="post">
+							<input type="hidden" name="city" value='{{obj.city}}'>
+							<input type="hidden" name="packdays" value='{{obj.pack_days}}'>
+							<input type="hidden" name="start" value='{{obj.start_date}}'>
+							<input type="hidden" name="end" value='{{obj.end_date}}'>
+							<input type="hidden" name="uname" value='{{request.session.username}}'>
+							<button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                            </button>
+							</form>
+							</div>
                         </div>
                     </div>	
     
@@ -259,93 +275,40 @@
                 </div>
                     
             </div>
-
-            <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
-		
-              <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
-                  
-                  <div class="column3">
-                      <div class="wine-text-container" style="text-align: center;">
-                          
-                          <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
-                              
-                              <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                              <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
-                              
-                              <br>
-                              <div class="row" style="text-align: center; margin-left: 100px;">
-                              <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
-                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                              </button>
-                              </div>
-                      </div>
-                  </div>	
-  
-                  <div class="column4" >
-                      <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
-                       <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
-                  </div>
-  
-              </div>
-                  
-          </div>
-
-          <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
-		
-            <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
-                
-                <div class="column3">
-                    <div class="wine-text-container" style="text-align: center;">
-                        
-                        <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
-                            
-                            <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                            <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
-                            
-                            <br>
-                            <div class="row" style="text-align: center; margin-left: 100px;">
-                            <button id="edit" title="Reschedule this trip" style="width: 200px;">  <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; Reschedule trip </button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                            </button>
-                            </div>
-                    </div>
-                </div>	
-
-                <div class="column4" >
-                    <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
-                     <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
-                </div>
-
-            </div>
-                
-        </div>
-
+{%endfor%}
         
       </div>
 
       <div id="past" class="container tab-pane fade parallax" style="color: black; margin-bottom: 50px;padding-bottom: 50px;" ><br>
         <h3 class="myglow">Past Trips</h3>
-        
+        {% for obj in pasttrips %}
         <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
 		
           <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
               
+			 
+			  
               <div class="column3">
                   <div class="wine-text-container" style="text-align: center;">
                       
                       <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
                           
-                          <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                          <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
+                          <h3><div class="mybold_text">{{obj.pack_days}} days in {{obj.city}}</div></h3><br>
+                          <h4><div class="mybold_text">{{obj.start_date}} - {{obj.end_date}}</div></h4>
                           
                           <br>
                           <div class="row" style="text-align: center; margin-left: 100px;">
                           <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                          </button>
+                         <form action="/planning/viewitin/" method="post">
+							<input type="hidden" name="city" value='{{obj.city}}'>
+							<input type="hidden" name="packdays" value='{{obj.pack_days}}'>
+							<input type="hidden" name="start" value='{{obj.start_date}}'>
+							<input type="hidden" name="end" value='{{obj.end_date}}'>
+							<input type="hidden" name="uname" value='{{request.session.username}}'>
+							<button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
+                            </button>
+						</form>
                           </div>
                   </div>
               </div>	
@@ -358,68 +321,9 @@
           </div>
               
       </div>
+	{%endfor%}
+      
 
-      <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
-		
-        <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
-            
-            <div class="column3">
-                <div class="wine-text-container" style="text-align: center;">
-                    
-                    <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
-                        
-                        <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                        <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
-                        
-                        <br>
-                        <div class="row" style="text-align: center; margin-left: 100px;">
-                        <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                        </button>
-                        </div>
-                </div>
-            </div>	
-
-            <div class="column4" >
-                <!-- <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button> -->
-                 <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
-            </div>
-
-        </div>
-            
-    </div>
-
-     <div class="row" style=" margin:50px; border:3px solid grey; background-color: white;">
-		
-      <div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
-          
-          <div class="column3">
-              <div class="wine-text-container" style="text-align: center;">
-                  
-                  <!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
-                      
-                      <h3><div class="mybold_text">{{days}} days in {{city}}</div></h3><br>
-                      <h4><div class="mybold_text">{{start_date}} - {{end_date}}</div></h4>
-                      
-                      <br>
-                      <div class="row" style="text-align: center; margin-left: 100px;">
-                      <button id="edit" title="Delete this plan from history" style="width: 300px;">  <i class="fa fa-trash"  ></i> &nbsp;&nbsp;&nbsp; Delete this Itinerary </button>
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <button id="edit" title="See Trip Plan" style="width: 200px;">  <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp; See Itinerary > 
-                      </button>
-                      </div>
-              </div>
-          </div>	
-
-          <div class="column4" >
-              <!-- <button id="del" title="Delete the plan for this upcoming trip !" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button> -->
-               <!-- <button id="edit" title="Reschedule this trip " >  <i class="fa fa-pencil" aria-hidden="true"></i>  </button> -->
-          </div>
-
-      </div>
-          
-    </div>
 
       </div>
 

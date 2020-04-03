@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-{%load staticfiles%}
+{%load static%}
 <html>
 <head>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,8 +16,8 @@
 	{%csrf_token%}
       <div class="row">
         <div class="input-field col s12">
-          <input id="email" type="text" class="validate" name="uname" required>
-          <label for="email">UserName</label>
+          <input id="email" type="text" class="validate" name="uname" placeholder="UserName"required>
+          <!-- <label for="email">UserName</label> -->
         </div>
       </div>
 	  <div class="row">

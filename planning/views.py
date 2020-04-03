@@ -2,9 +2,10 @@ from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib import auth
+from .utils import render_to_pdf
 from django.template.context_processors import csrf
 from django.utils.dateparse import parse_date
-from .models import user_details
+from .models import users_details,trip_details,places
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 #from django.shortcuts import render
@@ -189,8 +190,13 @@ def trip(request):
 		
 		end = request.POST.get('enddate','')
 		trip_end = datetime.datetime.strptime(end,format_str).date()
-		#print(datetime_obj.date())
+		trip_start1 = datetime.datetime.strptime(start,format_str).strftime('%Y-%m-%d')
+		trip_end1 = datetime.datetime.strptime(end,format_str).strftime('%Y-%m-%d')
 		
+		print(start,end)
+		print(trip_start1,trip_end1)
+		#request.session['start'] = trip_start
+		#request.session['end'] = trip_end
 		nom = Nominatim(user_agent="my-application")
 		coordinates = nom.geocode(location_name)
 		if coordinates == None :
@@ -265,6 +271,10 @@ def trip(request):
 		start =[]
 		end =[]
 		rating=[]
+		pname= []
+		paddress=[]
+		pcategory=[]
+		pdistance=[]
 		for place in results['response']['groups'][0]['items']:
 			try:
 			
@@ -296,23 +306,27 @@ def trip(request):
 					mainobject.p_lat=place['venue']['location']['lat']
 					mainobject.p_long = place['venue']['location']['lng']
             				
-					
+					pname.append(mainobject.p_name)
+					paddress.append(mainobject.p_address)
+					pcategory.append(mainobject.p_categorytype)
+					pdistance.append(mainobject.p_distance)
 					
 				
 					URL = "https://www.google.com/search?q={}".format(
 						place['venue']['name']
 					)
 					print(URL)
-					cont = requests.get(URL).content 
-					soup = BeautifulSoup(cont, 'html.parser')
-					result=soup.find_all("span",attrs={"class":"oqSTJd"})
-					print("Rating of ", place['venue']['name'] , " is ",result[0].text)
-					mainobject.p_ratings = result[0].text    
+					# cont = requests.get(URL).content 
+					# soup = BeautifulSoup(cont, 'html.parser')
+					# result=soup.find_all("span",attrs={"class":"oqSTJd"})
+					# print("Rating of ", place['venue']['name'] , " is ",result[0].text)
+					# mainobject.p_ratings = result[0].text    
 
 					if( (end_time + datetime.timedelta(0,travel_time)).time() >= rest_time.time() ):
 						print("TIME TO REST FOR TODAY :) See ya tomorrow morning at 9 AM. Till then Good Night!")
 						print("*********** DAY ",curr_day," ENDS *****************")
 						curr_day = curr_day + 1
+						print("Current day : ",curr_day)
 						start_time = datetime.datetime(2020,1,26,9,00,00)
 						end_time = start_time
 					else:
@@ -403,11 +417,11 @@ def trip(request):
 						place['venue']['name']
 					)
 					print(URL)
-					cont = requests.get(URL).content 
-					soup = BeautifulSoup(cont, 'html.parser')
-					result=soup.find_all("span",attrs={"class":"oqSTJd"})
-					print("Rating of ", place['venue']['name'] , " is ",result[0].text)
-					mainobject.p_ratings = result[0].text    
+					# cont = requests.get(URL).content 
+					# soup = BeautifulSoup(cont, 'html.parser')
+					# result=soup.find_all("span",attrs={"class":"oqSTJd"})
+					# print("Rating of ", place['venue']['name'] , " is ",result[0].text)
+					# mainobject.p_ratings = result[0].text    
 
 					
 					
@@ -544,7 +558,7 @@ def trip(request):
 		istart = request.POST.get('startdate','')
 		
 		print(type(istart))
-		return render(request,"map_page.html",{'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'end':trip_end,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList})
+		return render(request,"map_page.html",{'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList})
 		
 		
 def homepage(request):
@@ -596,10 +610,10 @@ def auth_view(request):
 			context={'ab' : ab,}
 			return HttpResponseRedirect('/planning/home/',context)
 	else:
-		if user_details.objects.filter(email=username).exists() and user_details.objects.get(email=username).password==password:
+		if users_details.objects.filter(email=username).exists() and users_details.objects.get(email=username).password==password:
 			 
-			
-			request.session['username']=username
+			uname =users_details.objects.get(email=username).username
+			request.session['username']= uname
 			ab = request.session['username']
 			
 			context={'ab' : ab,}
@@ -631,18 +645,56 @@ def adduser_info(request):
 	
 	mob = request.POST.get('mobile', '')
 	
-	t = user_details(username = uid, password=pas,first_name=fnam,last_name=lnam,email=emai,mo_no=mob)
+	t = users_details(username = uid, password=pas,first_name=fnam,last_name=lnam,email=emai,mo_no=mob)
 	t.save()
 	return render(request,"login.html")
 
-def myaccount(request):
 
-	return render(request,'myaccount.html')
 
 def myplans(request):
+	try:
+		if request.session['username']:
+			uname=request.session['username']
+			data = trip_details.objects.filter(username=uname).values()
+			#for ob in data.values():
+			#days = trip_details.objects.all(username=uname).pack_days
+			#city = trip_details.objects.all(username=uname).city
+			print(data.values())
+			print(len(data))
+			
+			pasttrips = []
+			upcoming = []
+			current =  [] 
+			
+			
 
-	return render(request,'myplans.html')
+			today = date.today()
 
+				
+			d2 = today.strftime("%Y-%m-%d")
+			
+			d1 = datetime.datetime.strptime(d2,'%Y-%m-%d').date()
+			
+			for obj in data.values():
+				start_date = obj['start_date']
+				end_date = obj['end_date']
+				#start_date = datetime.datetime.strptime(start,'%Y-%m-%d').date()
+				#end_date = datetime.datetime.strptime(end,'%Y-%m-%d').date()
+				if end_date < d1:
+					pasttrips.append(obj)
+				elif start_date <= d1 and d1 <= end_date:
+					current.append(obj)
+				else:
+					upcoming.append(obj)
+				
+				
+
+			return render(request,'myplans.html',{'strip':data,'upcoming':upcoming,'current' :current,'pasttrips':pasttrips})
+			#,'city':city,'days': days
+			
+	except(AttributeError,KeyError):
+		context={}
+		return HttpResponseRedirect('/planning/login/',context)
 	
 def showIndividualmap(request):
 
@@ -663,3 +715,100 @@ def about(request):
 def contact(request):
 
 	return render(request,'contact.html')
+
+def logout(request):
+	del request.session['username']
+	auth.logout(request)
+	return render(request,'myhome.html')
+	
+def savetrip(request):
+	if request.session['username']:
+		place=request.POST.get('places','')
+		
+		city = request.POST.get('city','')
+		start = request.POST.get('start','')
+		end = request.POST.get('end','')
+		
+		packdays = request.POST.get('packdays','')
+		pname = request.POST.get('pname','').split(',')
+		paddress = request.POST.get('paddress','').split(',')
+		pcategory = request.POST.get('pcategory','').split(',')
+		pdistance = request.POST.get('pdistance','').split(',')
+		#print(places)
+		#print(pname)
+		#print(pname[0][1])
+		uname = request.session['username']
+		print(len(pname))
+		#del request.session['start']
+		#del request.session['end']
+		
+		for i in range(0,len(pdistance)):
+			a = pname[i]
+			b = pdistance[i]
+			c = paddress[i]
+			d = pcategory[i]
+			s = places(username=uname,city =city ,pack_days = int(packdays),start_date=start,end_date=end,place_name=a,place_address=c,place_distance=b,place_category=d)
+			s.save()
+		t = trip_details(username=uname,trip=place,city=city,pack_days=int(packdays),start_date=start,end_date=end)
+		t.save()
+		return render(request,'myhome.html')	
+	else:
+		return render(request,'login.html')
+		
+def viewitin(request):
+	city = request.POST.get('city','')
+	start1 = request.POST.get('start','')
+	end1 = request.POST.get('end','')
+	print(start1,end1)
+	packdays = request.POST.get('packdays','')
+	format_str = '%B %d, %Y'
+	uname=request.session['username']
+	start = datetime.datetime.strptime(start1,format_str).strftime('%Y-%m-%d')
+	end = datetime.datetime.strptime(end1,format_str).strftime('%Y-%m-%d')
+	print(start,end)
+	ob = places.objects.filter(username=uname,start_date=start,end_date=end,city =city ,pack_days=packdays).values()
+	return render(request,'map_page.html',{ 'object' : ob,'pack_days':packdays,'city':city})
+	
+def myaccount(request):
+	if request.session['username']:
+		uname=request.session['username']
+		data = users_details.objects.filter(username=uname).values()
+		for obj in data.values():
+			fname = obj['first_name']
+			lname= obj['last_name']
+			password = obj['password']
+			email = obj['email']
+			mobile = obj['mo_no']
+		return render(request,'myaccount.html',{'uname':uname,'fname':fname,'lname':lname,'email':email,'password':password,'mobile':mobile})
+	else:
+		return render(request,'login.html')
+		
+def update(request):
+	cuname = request.POST.get('uname', '')
+	uname= request.session['username']
+	pas = request.POST.get('password', '')
+	
+	fnam=request.POST.get('fname','')
+	lnam = request.POST.get('lname', '')
+	
+	emai = request.POST.get('email', '')
+	
+	mob = request.POST.get('mobile', '')
+	
+	users_details.objects.filter(username=uname).update(username=cuname,password=pas,first_name=fnam,last_name=lnam,email=emai,mo_no=mob)
+	request.session['username']=cuname
+	context ={}
+	return HttpResponseRedirect('/planning/myaccount/',context)
+	
+'''def myview(request):
+    results = request.POST.get('gettrip','')
+	return render_to_pdf('map_page.html',{'pagesize':'A4','mylist': results,})
+'''
+
+# def get(self, request, *args, **kwargs):
+        
+        # getting the template
+    # pdf = render_to_pdf('map_page.html')
+         
+         # rendering the template
+    # return HttpResponse(pdf, content_type='application/pdf')	

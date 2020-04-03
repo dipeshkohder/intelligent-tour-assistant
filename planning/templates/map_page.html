@@ -189,7 +189,24 @@
           </li>
       </ul>
   </div>
-    <ul class="navbar-nav">
+    {% if request.session.username %}
+	<ul class="navbar-nav"  style="left:0;">
+      <li class="nav-item" id="signin" style="display: inline;">
+          <div class="btn-group" >				
+            <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        ><b>{{request.session.username}}</b></button>
+      
+          <div class="dropdown-menu pull-left"> 
+          <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
+          <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
+          <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/planning/logout/">Logout</a> 
+          </div>
+        </div>
+      </li>
+    </ul>
+	{% else %}
+	<ul class="navbar-nav">
         
         <li class="nav-item" id="signin" style="display: inline;">
           <div class="btn-group">				
@@ -205,22 +222,8 @@
 				  </div>
         </li>
     </ul>
-
-    <ul class="navbar-nav"  style="left:0;">
-      <li class="nav-item" id="signin" style="display: inline;">
-          <div class="btn-group" >				
-            <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-        ><b>(( USERNAME ))</b></button>
-      
-          <div class="dropdown-menu pull-left"> 
-          <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
-          <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
-          <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/planning/signup/">Logout</a> 
-          </div>
-        </div>
-      </li>
-    </ul>
+	{% endif %}
+    
 
 
 </nav>
@@ -323,9 +326,25 @@ $(document).ready(function(){
 	
 </div>
 <div id="panel" style="text-align:center;">
-	<button class="btn btn-dark"> Save This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	
+	<form action="/planning/get/" method="post">
+	<input type="hidden" value="{{mainlist}}" name="gettrip">
 	<button class="btn btn-dark"> Download This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	</form>
 	<button class="btn btn-dark" id="custom"> Customize This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	<form action="/planning/savetrip/" method="post">
+	<input type="hidden" name="places" value='{{mainlist}}'>
+	<input type="hidden" name="packdays" value='{{pack_days}}'>
+	<input type="hidden" name="city" value='{{city}}'>
+	<input type="hidden" name="end" value='{{end}}'>
+	<input type="hidden" name="start" value='{{start}}'>
+	<input type="hidden" name="pname" value='{{pname}}'>
+	<input type="hidden" name="paddress" value='{{paddress}}'>
+	<input type="hidden" name="pcategory" value='{{pcategory}}'>
+	<input type="hidden" name="pdistance" value='{{pdistance}}'>
+	
+	<button class="btn btn-dark"> Save This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	</form>
 </div>
 <br><br>
 <b class="mybold-text">DAY BY DAY PLAN </b>
@@ -351,6 +370,74 @@ $(document).ready(function(){
 
 <!-- <div class="vl"></div> -->
 
+{% for obj in object %}
+<br>
+
+
+	{%if forloop.counter0|divisibleby:"5"%}
+ 
+	<p id="rcorners1"><b id = "currentDate{{forloop.counter}}" style="Vertical-align:middle;"></b></p>
+	
+	<script>
+		writeDate({{forloop.counter}});
+	</script>
+
+	{% endif %}
+	<span class="vl" id="span{{forloop.counter}}">
+	
+		<script>
+			setDestinationPlace("{{obj.p_name}}")
+		</script>
+
+
+		<div style="height:40px; margin-left:65px;" >
+			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a id= "linkformap{{forloop.counter}}" target = "_blank" href="https://www.google.com/maps/dir/?api=1&origin={{obj.p_name}}&destination={{obj.p_name}}&travelmode=driving" onclick = "setLink()" ><i>30 min</i></a>
+		</div>
+		
+		<script>
+			setLink({{forloop.counter}});
+			setOriginPlace("{{obj.place_name}}")
+		</script>
+	</span>
+  <span class="vl" id="spanline{{forloop.counter}}"></span>
+  
+		<div class="row" style="margin-top:0px;">
+		
+			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
+
+				<div class="column1"> Start ane end time batavase </div>
+							
+				<div class="column2">
+					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
+					<button class="btn btn-dark" style="width:155px;"> Explore This Place </button>
+				</div>
+				<div class="column3">
+					<div class="wine-text-container">
+						
+						<!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
+							
+							<h3><div>{{obj.place_name}}</div></h3>
+							<div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b>
+							
+							<br>
+							<div class="desc" id = "description"></div><br>
+							<b>ADDRESS : {{obj.place_address}}</b>
+							 
+							<b>Type  : {{obj.place_category}}</b>
+							<b>Distance : {{obj.place_distance}}</b><br><br>
+							
+					</div>
+				</div>	
+
+				<div class="column4" style="display:none;">
+					<button id="del" onClick="delete_place({{forloop.counter}})"><i class="fa fa-trash"  ></i></button>
+				</div>
+
+			</div>
+				
+		</div>
+			
+{% endfor %}
 
 {% for obj in mainlist %}
 <br>
@@ -388,7 +475,7 @@ $(document).ready(function(){
 			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
 
 				<div class="column1"> Start ane end time batavase </div>
-
+							
 				<div class="column2">
 					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
 					<button class="btn btn-dark" style="width:155px;"> Explore This Place </button>

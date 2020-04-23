@@ -4,6 +4,36 @@
 <head>
 	
   <title>Trip Planner</title>
+
+  <script type="application/x-javascript">
+	addEventListener("load", function () {
+		setTimeout(hideURLbar, 0);
+	}, false);
+
+	function hideURLbar() {
+		window.scrollTo(0, 1);
+	}
+	
+	
+</script>
+<!--// Meta tag Keywords -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- pop up box -->
+<link href="{%static 'css/popuo-box.css' %}" rel="stylesheet" type="text/css" media="all" />
+<!-- //pop up box -->
+<link rel = "stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'css/jquery.desoslide.css' %}">
+
+<!-- css files -->
+<!-- <link rel="stylesheet" href="css/bootstrap.css"> Bootstrap-Core-CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" /> <!-- Style-CSS --> 
+<link rel="stylesheet" href="{%static 'css/font-awesome.css' %}"> <!-- Font-Awesome-Icons-CSS -->
+<!-- //css files -->
+
+<link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
+
+
   <script src =  "https://maps.googleapis.com/maps/api/js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
       <script type="text/javascript">
@@ -146,12 +176,12 @@
         <ul class="navbar-nav mr-auto">
 
         </ul>
-
+<!-- 
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search">
             <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
                     aria-hidden='true'></i> &nbsp;<b>SEARCH</b></button>
-        </form>
+        </form> -->
     </div>
 </nav>
 
@@ -329,7 +359,7 @@ $(document).ready(function(){
 	
 	<form action="/planning/get/" method="post">
 	<input type="hidden" value="{{mainlist}}" name="gettrip">
-	<button class="btn btn-dark"> Download This Itinerary </button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-dark"> Download This Itinerary </button>&nbsp;&nbsp;&nbsp;<br><br>
 	</form>
 	<button class="btn btn-dark" id="custom"> Customize This Itinerary </button>&nbsp;&nbsp;&nbsp;
 	<form action="/planning/savetrip/" method="post">
@@ -343,11 +373,11 @@ $(document).ready(function(){
 	<input type="hidden" name="pcategory" value='{{pcategory}}'>
 	<input type="hidden" name="pdistance" value='{{pdistance}}'>
 	<input type="hidden" name="category" value='{{category}}'>
-	<input type="hidden" name="radius" value='{{radius}}'>
+	<input type="hidden" name="radius" value='{{radius}}'><br>
 	<button class="btn btn-dark"> Save This Itinerary </button>&nbsp;&nbsp;&nbsp;
 	</form>
 </div>
-<br><br>
+<br>
 <b class="mybold-text">DAY BY DAY PLAN </b>
 <br><br>
 
@@ -835,6 +865,44 @@ img {
 }
 </style>
 </div>
+
+<!-- footer -->
+<footer class="py-5">
+	<div class="container py-md-3">
+		<div class="row footer-grids pb-md-5 pb-3">	
+			<div class="col-md-4 col-sm-4 col-6">
+				<a href="#"> <i class="fa fa-phone"></i>+91 926 532 4087</a>
+			</div>
+			<div class="col-md-4 col-sm-4 col-6">
+				<a href="#"> <i class="fa fa-envelope"></i>fstech@gmail.com</a>
+			</div>
+			<!-- <div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-skype"></i>Skype Call</a>
+			</div> -->
+			<div class="col-md-4 col-sm-4 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-comment"></i>Talk In-Person</a>
+			</div>
+		</div>
+		
+		<div class="subscribe-grid text-center">
+			<p class="para three mt-4"> Everyone has a dream place to visit once in life, and many get the chance to fulfill their dream trip. 
+				Give us the oppurtunity to check your Bucket List one after another, and your soul will be satisfied. </p>
+			<h5>Even hell is worth a visit ;</h5>
+			<p>Time to get away</p>
+			
+		</div>
+	</div>
+</footer>
+<!-- //footer -->
+<section class="copyright py-4 text-center">
+	<div class="container">
+		<p>Copyright © 2020 Escape Plan. All Rights Reserved | Design by <a href="#" target="=_blank"> Fruit Salad Technologies Pvt. Ltd. </a></p>
+	</div>
+</section>
+
+
+
+
 </body>
 
 </html>

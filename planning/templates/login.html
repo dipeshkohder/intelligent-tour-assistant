@@ -7,14 +7,97 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito|Raleway">
+	<link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/jquery.desoslide.css' %}">
+	<link rel = "stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{%static 'css/font-awesome.css' %}">
 </head>
 <body>
 
-<div class="background-image"></div>
-<div class="title">
-  <h3 class="center-align grey-text">Welcome!</h3>
+<header>
+	<div class="container agile-banner_nav">
+		<div class="row header-top">
+			<div class="col-md-5 top-left p-0">
+				<p><i class="fa fa-phone" aria-hidden="true"></i> Reach us here : +91 926-532-4087 </p>
+			</div>
+			<div class="col-md-7 top-right p-0">
+				<p><i class="fa fa-map-marker" aria-hidden="true"></i> Australian Travel Agency, Ravish NSW, Australia.
+			</div>
+		</div>
+	
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			
+			<h1><a class="navbar-brand" href="/planning/home/">ESCAPE PLAN</a></h1>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="/planning/home/">Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/planning/about/">Meet Our Team</a>
+					</li>
+					<!-- <li class="nav-item">
+						<a class="nav-link" href="services.html">Services</a>
+					</li> -->
+					<li class="nav-item">
+						<a class="nav-link" href="/planning/myplans/">My Itineraries </a>
+					</li>
+					
+					<li class="nav-item">
+						<a class="nav-link" href="/planning/contact/">Get in touch</a>
+					</li>
+					{%if request.session.username %}
+					<li class="nav-item pr-lg-0">
+						<div class="btn-group">				
+							<button type="button" class="btn btn-outline-light dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							 ><b>{{request.session.username}}</b></button>
+						
+							<div class="dropdown-menu"> 
+								<a class="dropdown-item" href="/planning/logout/">Log Out</a> 
+								
+    
+								
+								
+									
+							</div>
+						</div>
+						
+					</li>
+					{%else%}
+					<li class="nav-item pr-lg-0">
+						<div class="btn-group">				
+							<button type="button" class="btn btn-outline-light dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							 ><b>Sign In</b></button>
+						
+							<div class="dropdown-menu"> 
+								<a class="dropdown-item" href="/planning/login/">Log In</a> 
+								<div class="dropdown-divider"></div>
+    
+								<a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a>
+								
+									
+							</div>
+						</div>
+						
+					</li>
+					{%endif%}
+				</ul>
+			</div>
+		  
+		</nav>
+	</div>
+</header>
+
+<div class="innerpage-banner">
+	<div class="layer1">
+	</div>
 </div>
-<div class="row">
+<!--<div class="row">
   <div class="col s12 l4 offset-l4">
     <div class="card grey lighten-3">
       <div class="card-content">
@@ -44,7 +127,157 @@
       </div>
     </div>
   </div>
+</div>-->
+<section class="w3ls-section contact py-5">
+	<div class="container py-sm-3">
+<div class="row contact_wthreerow agileits-w3layouts">
+		
+			
+			<div class="col-lg-7 col-md-6 mt-md-0 mt-5 w3l_contact_form">
+				<h4><center>Login</center></h4>
+				<form action="/planning/checklogin/" method="post">
+				{%csrf_token%}
+					
+					<input type="email" name="email" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"
+						required="">
+					<input type="text"  value="Password" name="pass"  onfocus="this.value = '';" onblur="if (this.value == 'Password') {this.value = 'Phone';}"
+						required="">
+					<input type="submit" value="Submit">
+				</form>
+			</div>
 </div>
-</body>
+</div>
+</section>
+<footer class="py-5">
+	<div class="container py-md-3">
+		<div class="row footer-grids pb-md-5 pb-3">	
+			<div class="col-md-3 col-sm-6 col-6">
+				<a href="#"> <i class="fa fa-phone"></i>Call Us</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6">
+				<a href="#"> <i class="fa fa-envelope"></i>Send Message</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-skype"></i>Skype Call</a>
+			</div>
+			<div class="col-md-3 col-sm-6 col-6 mt-md-0 mt-2">
+				<a href="#"> <i class="fa fa-comment"></i>Online Chat</a>
+			</div>
+		</div>
+		
+		<div class="subscribe-grid text-center">
+			<p class="para three mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at placerat ante. Praesent nulla nunc, pretium dapibus efficitur in, auctor eget elit. Lorem ipsum dolor sit amet </p>
+			<h5>Subscribe for our latest updates</h5>
+			<p>Get
+				<span>10%</span> off on booking</p>
+			<form action="#" method="post">
+				<input class="form-control" type="email" placeholder="Subscribe" name="Subscribe" required="">
+				<button class="btn1">
+					<i class="fa fa-paper-plane"></i>
+				</button>
+			</form>
+		</div>
+	</div>
+</footer>
+<section class="copyright py-4 text-center">
+	<div class="container">
+		<p>© 2018 In Travel. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="=_blank"> W3layouts </a></p>
+	</div>
+</section>
+<script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script> <!-- Necessary-JavaScript-File-For-Bootstrap --> 
+	<!-- //js -->
+	
+	<!-- desoslide-JavaScript -->
+	<script src="{%static 'js/jquery.desoslide.js'%}"></script>
+	<script>
+		$('#demo1_thumbs').desoSlide({
+			main: {
+				container: '#demo1_main_image',
+				cssClass: 'img-responsive'
+			},
+			effect: 'sideFade',
+			caption: true
+		});
+	</script>
+
+	<!-- Calendar -->
+		<script src="{%static 'js/jquery-ui.js'%}"></script>
+		<script>
+			$(function() {
+				$( "#datepicker,#datepicker1" ).datepicker();
+			});
+		</script>
+	<!-- //Calendar -->
+	
+	<!-- banner slider -->
+	<script src="{%static 'js/responsiveslides.min.js'%}"></script>
+	<script>
+		$(function () {
+			$("#slider4").responsiveSlides({
+				auto: true,
+				pager: true,
+				nav: true,
+				speed: 1000,
+				namespace: "callbacks",
+				before: function () {
+					$('.events').append("<li>before event fired.</li>");
+				},
+				after: function () {
+					$('.events').append("<li>after event fired.</li>");
+				}
+			});
+		});
+	</script>
+	<!-- //banner slider -->
+	
+	<!--pop-up-box -->
+	<script src="{%static 'js/jquery.magnific-popup.js'%}"></script>
+	<script>
+		$(document).ready(function () {
+			$('.popup-with-zoom-anim').magnificPopup({
+				type: 'inline',
+				fixedContentPos: false,
+				fixedBgPos: true,
+				overflowY: 'auto',
+				closeBtnInside: true,
+				preloader: false,
+				midClick: true,
+				removalDelay: 300,
+				mainClass: 'my-mfp-zoom-in'
+			});
+		});
+	</script>
+	<!-- //pop-up-box -->
+
+	<!-- start-smoth-scrolling -->
+	<script src="{%static 'js/SmoothScroll.min.js'%}"></script>
+	<script type="text/javascript" src="{%static 'js/move-top.js'%}"></script>
+	<script type="text/javascript" src="{%static 'js/easing.js'%}"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+			});
+		});
+	</script>
+	<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			/*
+				var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+				};
+			*/
+								
+			$().UItoTop({ easingType: 'easeOutQuart' });
+								
+			});
+	</script>
+	</body>
 <!--<script type="text/javascript" src="{%static 'js/login.js'%}"></script>-->
 </html>

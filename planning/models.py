@@ -19,6 +19,8 @@ class trip_details(models.Model):
 	trip = JSONField()
 	start_date = models.DateField()		
 	end_date = models.DateField()
+	category= models.CharField(max_length=20)
+	radius = models.IntegerField()
 	
 class places(models.Model):
 	username = models.CharField(max_length=20)

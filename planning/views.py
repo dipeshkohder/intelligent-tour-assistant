@@ -558,7 +558,7 @@ def trip(request):
 		istart = request.POST.get('startdate','')
 		
 		print(type(istart))
-		return render(request,"map_page.html",{'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList})
+		return render(request,"map_page.html",{'radius':location_radius,'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList,'category':activitypreferences})
 		
 		
 def homepage(request):
@@ -636,7 +636,7 @@ def adduser_info(request):
 	#c.update(csrf(request))
 	uid = request.POST.get('uname', '')
 	
-	pas = request.POST.get('password', '')
+	pas = request.POST.get('pass', '')
 	
 	fnam=request.POST.get('fname','')
 	lnam = request.POST.get('lname', '')
@@ -724,11 +724,11 @@ def logout(request):
 def savetrip(request):
 	if request.session['username']:
 		place=request.POST.get('places','')
-		
+		category = request.POST.get('category','')
 		city = request.POST.get('city','')
 		start = request.POST.get('start','')
 		end = request.POST.get('end','')
-		
+		radius = request.POST.get('radius','')
 		packdays = request.POST.get('packdays','')
 		pname = request.POST.get('pname','').split(',')
 		paddress = request.POST.get('paddress','').split(',')
@@ -749,25 +749,25 @@ def savetrip(request):
 			d = pcategory[i]
 			s = places(username=uname,city =city ,pack_days = int(packdays),start_date=start,end_date=end,place_name=a,place_address=c,place_distance=b,place_category=d)
 			s.save()
-		t = trip_details(username=uname,trip=place,city=city,pack_days=int(packdays),start_date=start,end_date=end)
+		t = trip_details(radius=int(radius),username=uname,trip=place,city=city,pack_days=int(packdays),start_date=start,end_date=end,category=category)
 		t.save()
 		return render(request,'myhome.html')	
 	else:
 		return render(request,'login.html')
 		
-def viewitin(request):
-	city = request.POST.get('city','')
-	start1 = request.POST.get('start','')
-	end1 = request.POST.get('end','')
-	print(start1,end1)
-	packdays = request.POST.get('packdays','')
-	format_str = '%B %d, %Y'
-	uname=request.session['username']
-	start = datetime.datetime.strptime(start1,format_str).strftime('%Y-%m-%d')
-	end = datetime.datetime.strptime(end1,format_str).strftime('%Y-%m-%d')
-	print(start,end)
-	ob = places.objects.filter(username=uname,start_date=start,end_date=end,city =city ,pack_days=packdays).values()
-	return render(request,'map_page.html',{ 'object' : ob,'pack_days':packdays,'city':city})
+# def viewitin(request):
+	# city = request.POST.get('city','')
+	# start1 = request.POST.get('start','')
+	# end1 = request.POST.get('end','')
+	# print(start1,end1)
+	# packdays = request.POST.get('packdays','')
+	# format_str = '%B %d, %Y'
+	# uname=request.session['username']
+	# start = datetime.datetime.strptime(start1,format_str).strftime('%Y-%m-%d')
+	# end = datetime.datetime.strptime(end1,format_str).strftime('%Y-%m-%d')
+	# print(start,end)
+	# ob = places.objects.filter(username=uname,start_date=start,end_date=end,city =city ,pack_days=packdays).values()
+	# return render(request,'map_page.html',{ 'object' : ob,'pack_days':packdays,'city':city})
 	
 def myaccount(request):
 	if request.session['username']:
@@ -812,3 +812,408 @@ def update(request):
          
          # rendering the template
     # return HttpResponse(pdf, content_type='application/pdf')	
+	
+def viewitin(request):
+#code for finding out coordinates of given address
+		#c = {}
+	    #c.update(csrf(request))
+		class Place_Info:
+			p_name=''
+			p_categoryid=''
+			p_lat=0
+			p_long=0
+			p_categorytype=''
+			p_distance=0
+			p_address=''
+			p_summary=''
+			p_imageURL=''
+			p_ratings=''
+
+			def Place_Info_print(self):
+				return "Place Name : ",self.p_name," Category Type : ",self.p_categorytype," Place Ratings : ",self.p_ratings," Place s : ",self.p_name
+
+		main_list = []
+		global SuggestionList
+		suggestionListSize = 0
+		print("Enter City Name : ",end = '')
+		location_name = request.POST.get('city','')
+		start = request.POST.get('start','')
+		activitypreferences = request.POST.get('category','')
+		location_radius = int(request.POST.get('radius',''))
+		#fstart = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+		format_str = '%B %d, %Y'
+		trip_start = datetime.datetime.strptime(start,format_str).date()
+		#print(datetime_obj.date())	
+		
+		end = request.POST.get('end','')
+		trip_end = datetime.datetime.strptime(end,format_str).date()
+		trip_start1 = datetime.datetime.strptime(start,format_str).strftime('%Y-%m-%d')
+		trip_end1 = datetime.datetime.strptime(end,format_str).strftime('%Y-%m-%d')
+		
+		print(start,end)
+		print(trip_start1,trip_end1)
+		#request.session['start'] = trip_start
+		#request.session['end'] = trip_end
+		nom = Nominatim(user_agent="my-application")
+		coordinates = nom.geocode(location_name)
+		if coordinates == None :
+			print('Not found')
+		else:  
+			print(coordinates.address)
+			longitude = str(coordinates.longitude)
+			latitude = str(coordinates.latitude)
+			location_coordinates =  latitude + ',' + longitude 
+			print(location_coordinates)
+
+		
+		start_time = datetime.datetime(2020,1,26,9,00,00) #trip start date
+		#trip_start = datetime.datetime(2020,1,26) 
+		#trip_end = datetime.datetime(2020,1,30) # pela -> yy |  then ->  mm  | then -> dd
+		
+		pack_night = (trip_end - trip_start).days
+		global pack_days
+		pack_days = ((trip_end - trip_start) + timedelta(0,86400)).days # 1 divas add karo expicitly
+		print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',type(pack_days))
+		
+		travel_time = 30*60 #assuming for now, 30 minutes to reach from one place to another
+		end_time=start_time
+		rest_time = datetime.datetime(100,1,1,21,00,00)
+		
+		#setup for the foursquare API
+		client_id = 'M2QVKFEINCIFSIVH1OCONVATMWRPQNWTAPX5Q42VN3BDRMB5'
+		client_secret = 'LUU5AZWGRJIMVDTVSP3UQBN50TC0YHS5XZ44NHSXXM5KWRRQ'
+		version = '20120610'
+		limit = 100
+
+		category='4bf58dd8d48988d181941735'
+		
+		print('Enter radius : ',end = '')
+		
+		if activitypreferences == "monument" :
+			category='4bf58dd8d48988d12d941735'
+		elif activitypreferences == "culture":
+			category = '52e81612bcbc57f1066b7a32'
+		elif activitypreferences == "adventure":
+			category = '4eb1d4d54b900d56c88a45fc'
+		elif activitypreferences == "spritual":
+			category = '4bf58dd8d48988d131941735'
+		elif activitypreferences == "professional":
+			category = '4d4b7105d754a06375d81259'
+		elif activitypreferences == "mountain":
+			category = '4eb1d4d54b900d56c88a45fc'
+		elif activitypreferences == "beach":
+			category = '4bf58dd8d48988d1e2941735'
+		elif activitypreferences == "museum":
+			category = '4bf58dd8d48988d181941735'
+
+			
+		url = 'https://api.foursquare.com/v2/venues/explore?&client_id={}&client_secret={}&v={}&ll={},{}&radius={}&limit={}&sortByDistance={}&categoryId={}'.format(
+			client_id, 
+			client_secret, 
+			version, 
+			latitude, 
+			longitude,
+			location_radius, 
+			limit,1,
+			category
+			)
+		print(url)
+		results = requests.get(url).json()
+		d = json.dumps(results)
+		e = json.loads(d) 
+		
+		alist=[]
+		curr_day = 1
+		links= []
+		start =[]
+		end =[]
+		rating=[]
+		pname= []
+		paddress=[]
+		pcategory=[]
+		pdistance=[]
+		for place in results['response']['groups'][0]['items']:
+			try:
+			
+				
+				if curr_day <= pack_days:
+					
+					global mainobject
+					mainobject = Place_Info()
+					
+					print("=====  DAY ",curr_day," of ",pack_days,"=======")
+					start_time = end_time
+					end_time = start_time + datetime.timedelta(0,7200) 
+					start.append(start_time.time())
+					end.append(end_time.time())
+					print("Duration : ",start_time.time()," - ",end_time.time())
+					
+					print("Place id : ",place['venue']['id'])
+					print("Place name : ",place['venue']['name'])
+					print("Place distance : ",place['venue']['location']['distance'])
+					print("Place address : ",place['venue']['location']['formattedAddress'][0])
+					print("Place category type : ",place['venue']['categories'][0]['name'])
+				
+				
+					mainobject.p_categoryid = place['venue']['id']
+					mainobject.p_name = place['venue']['name']
+					mainobject.p_address = place['venue']['location']['formattedAddress'][0]
+					mainobject.p_categorytype = place['venue']['categories'][0]['name']
+					mainobject.p_distance = place['venue']['location']['distance']
+					mainobject.p_lat=place['venue']['location']['lat']
+					mainobject.p_long = place['venue']['location']['lng']
+            				
+					pname.append(mainobject.p_name)
+					paddress.append(mainobject.p_address)
+					pcategory.append(mainobject.p_categorytype)
+					pdistance.append(mainobject.p_distance)
+					
+				
+					URL = "https://www.google.com/search?q={}".format(
+						place['venue']['name']
+					)
+					print(URL)
+					# cont = requests.get(URL).content 
+					# soup = BeautifulSoup(cont, 'html.parser')
+					# result=soup.find_all("span",attrs={"class":"oqSTJd"})
+					# print("Rating of ", place['venue']['name'] , " is ",result[0].text)
+					# mainobject.p_ratings = result[0].text    
+
+					if( (end_time + datetime.timedelta(0,travel_time)).time() >= rest_time.time() ):
+						print("TIME TO REST FOR TODAY :) See ya tomorrow morning at 9 AM. Till then Good Night!")
+						print("*********** DAY ",curr_day," ENDS *****************")
+						curr_day = curr_day + 1
+						print("Current day : ",curr_day)
+						start_time = datetime.datetime(2020,1,26,9,00,00)
+						end_time = start_time
+					else:
+						end_time = end_time + datetime.timedelta(0,travel_time)
+					
+					
+					'''urldetails = 'https://api.foursquare.com/v2/venues/'+place['venue']['id']+'?client_id={}&client_secret={}&v={}'.format(
+					client_id, 
+					client_secret, 
+					version
+					
+					)
+
+					#print("URL GOT: ",urldetails)
+
+					
+					dets = requests.get(urldetails).json()
+					'''#temp_a = json.dumps(dets)
+					#temp_b = json.loads(temp_a) 
+					#links.append(temp_b)
+					# print("PLACE DETAILS : ",dets['response'])
+					#for test in dets['response']['venue']:
+					#	print(test)
+					print('*******************************')
+					#print(dets['response'])
+					#alist.append(dets)
+					#for test in dets['response']['venue']['tips']['groups'][0]['items']:
+					#	print(test['text'])
+					#	mainobject.p_summary = test['text']
+					#print("============================================================================================================")
+					'''for test in dets['response']['venue']['photos']['groups'][0]['items']:
+						links.append(test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix'])
+						mainobject.p_imageURL = test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix']
+					'''
+					#for rating
+					'''key = "rating"
+					flag = 1
+					for obj in dets['response']['venue']:
+						if obj == key:
+							flag = 0
+					if flag == 0:
+						print("Place Ratings : ",dets['response']['venue']['rating'])
+						rating.append(dets['response']['venue']['rating'])
+					if (flag == 1):
+						print("*** Ratings Not Found ***") 
+						rating.append("No Ratings")
+					'''
+					#query = place['venue']['name']
+					#links=[]
+					#for j in search(query, tld="co.in", num=10, stop=1, pause=2):
+					#	print(j)
+					#	links.append(j)
+					#print("---------------------------/////////---------------------")
+					#print(wikipedia.summary(place['venue']['name'],sentences=3))
+					#alist.append(wikipedia.summary(place['venue']['name'],sentences=3))
+					#print("--------------------------//////////-----------------------")
+					
+					main_list.append(mainobject)
+					print("Object mathi",mainobject.p_name)
+					SuggestionList.clear()
+									
+				else:
+				
+					
+					############################CODE FOR SUGGESTION LIST#########################################
+					mainobject = Place_Info()
+					
+					
+					print("Place id : ",place['venue']['id'])
+					print("Place name : ",place['venue']['name'])
+					print("Place distance : ",place['venue']['location']['distance'])
+					print("Place address : ",place['venue']['location']['formattedAddress'][0])
+					print("Place category type : ",place['venue']['categories'][0]['name'])
+				
+				
+					mainobject.p_categoryid = place['venue']['id']
+					mainobject.p_name = place['venue']['name']
+					mainobject.p_address = place['venue']['location']['formattedAddress'][0]
+					mainobject.p_categorytype = place['venue']['categories'][0]['name']
+					mainobject.p_distance = place['venue']['location']['distance']
+					mainobject.p_lat=place['venue']['location']['lat']
+					mainobject.p_long = place['venue']['location']['lng']
+            				
+					
+					
+				
+					URL = "https://www.google.com/search?q={}".format(
+						place['venue']['name']
+					)
+					print(URL)
+					# cont = requests.get(URL).content 
+					# soup = BeautifulSoup(cont, 'html.parser')
+					# result=soup.find_all("span",attrs={"class":"oqSTJd"})
+					# print("Rating of ", place['venue']['name'] , " is ",result[0].text)
+					# mainobject.p_ratings = result[0].text    
+
+					
+					
+					'''urldetails = 'https://api.foursquare.com/v2/venues/'+place['venue']['id']+'?client_id={}&client_secret={}&v={}'.format(
+					client_id, 
+					client_secret, 
+					version
+					
+					)
+
+					#print("URL GOT: ",urldetails)
+
+					
+					dets = requests.get(urldetails).json()
+					'''#temp_a = json.dumps(dets)
+					#temp_b = json.loads(temp_a) 
+					#links.append(temp_b)
+					# print("PLACE DETAILS : ",dets['response'])
+					#for test in dets['response']['venue']:
+					#	print(test)
+					print('*******************************')
+					#print(dets['response'])
+					#alist.append(dets)
+					#for test in dets['response']['venue']['tips']['groups'][0]['items']:
+					#	print(test['text'])
+					#	mainobject.p_summary = test['text']
+					#print("============================================================================================================")
+					'''for test in dets['response']['venue']['photos']['groups'][0]['items']:
+						links.append(test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix'])
+						mainobject.p_imageURL = test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix']
+					'''
+					#for rating
+					'''key = "rating"
+					flag = 1
+					for obj in dets['response']['venue']:
+						if obj == key:
+							flag = 0
+					if flag == 0:
+						print("Place Ratings : ",dets['response']['venue']['rating'])
+						rating.append(dets['response']['venue']['rating'])
+					if (flag == 1):
+						print("*** Ratings Not Found ***") 
+						rating.append("No Ratings")
+					'''
+					#query = place['venue']['name']
+					#links=[]
+					#for j in search(query, tld="co.in", num=10, stop=1, pause=2):
+					#	print(j)
+					#	links.append(j)
+					#print("---------------------------/////////---------------------")
+					#print(wikipedia.summary(place['venue']['name'],sentences=3))
+					#alist.append(wikipedia.summary(place['venue']['name'],sentences=3))
+					#print("--------------------------//////////-----------------------")
+					
+					SuggestionList.append(mainobject)
+					
+					suggestionListSize = suggestionListSize + 1
+					if suggestionListSize == 5:
+						break
+					print("Object mathi",mainobject.p_name)
+					
+					
+					############################CODE FOR SUGGESTION LIST ENDS ###################################
+					
+					
+			
+				print('******************************************************************************************')
+					
+			except:
+				#main_list.append(mainobject)
+				pass
+		
+		global OptimizedItinerary
+		print("hii1")
+		# if __name__ == "__main__": 
+  
+			
+		s = 0
+		print("hii2")
+		#OptimizedItinerary,min_distance = travellingSalesmanProblem(main_list, s)
+
+
+
+		# print("OptimizedItinerary has distance : ",min_distance)
+		# for place in OptimizedItinerary:
+			# print(place.p_name)
+		# print("--- DELETION ---")
+		# flag = 0
+		# while( flag != 999 ):
+				
+			# flag = int(input("Enter index of place to delete : enter 999 to exit "))
+
+			# if flag != 999:
+				# del OptimizedItinerary[flag]
+				# OptimizedItinerary,min_distance = travellingSalesmanProblem(OptimizedItinerary, s)
+			# for name in OptimizedItinerary:
+				# print("After Deleting  : ",name.p_name," Distance : ",min_distance)
+
+			# print('******************************************************************************************')
+	
+		#print(main_list)
+		
+		
+		
+		#####################################CODE FOR MAKING OptimizedItinerary FOR DIFFERENT DAYS#############################################
+			
+			
+		
+		split_list = []
+			
+		split_index = 0
+		for i in range(pack_days):
+			split_list.append(split_index + 5)
+			split_index = split_index + 5
+			
+			
+		splited_optimizedItinenary = [main_list[i : j] for i, j in zip([0] + split_list, split_list + [None])] 
+		
+		#print(str(splited_optimizedItinenary))
+		
+		OptimizedItineraryWithSplited = []
+		for RandomItinenary in splited_optimizedItinenary:
+			if len(RandomItinenary) >= 3:
+				Itinenary,min_distance = travellingSalesmanProblem(RandomItinenary,0)
+				OptimizedItineraryWithSplited.append(Itinenary)
+
+		OptimizedItinerary = itertools.chain.from_iterable(OptimizedItineraryWithSplited)
+		
+	
+		#main_list = OptimizedItinerary
+		#######################################################################################################################################
+		
+		global istart
+		istart = request.POST.get('startdate','')
+		
+		print(type(istart))
+		return render(request,"map_page.html",{'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList,'category':activitypreferences})
+	

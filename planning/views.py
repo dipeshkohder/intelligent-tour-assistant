@@ -24,6 +24,7 @@ except ImportError:
 	print("No module named 'google' found")
 import urllib.request , json
 from datetime import time
+from datetime import datetime
 import datetime
 from datetime import timedelta
 from datetime import date
@@ -34,14 +35,28 @@ import pickle
 import itertools
 
 
-
+links = []
+start = []
+end = []
+rating = []
+e = []
+pack_days = 0
+pack_night = 0
+trip_start1 = date.today()
+trip_end1 = date.today()
+location_radius = 0
 OptimizedItineraryForMap = []
+location_name = ""
 OptimizedItinerary = []
+pname = []
+paddress = []
+pdistance = []
+pcategory = []
 SuggestionList = []
 istart = " "
-pack_days = 0
 mainobject = None
 city = " "
+activitypreferences = ""
 
 def index(request):
 	return HttpResponse("hello World!! Django is unchained!")
@@ -180,23 +195,27 @@ def trip(request):
 		global SuggestionList
 		suggestionListSize = 0
 		print("Enter City Name : ",end = '')
+		global location_name
 		location_name = request.POST.get('place','')
 		global city
 		city = location_name
-		start = request.POST.get('startdate','')
+		
+		start_itinerary_date = request.POST.get('startdate','')
+		global activitypreferences
 		activitypreferences = request.POST.get('activitypreferences','')
 		
 		#fstart = datetime.datetime.strptime(start, "%Y-%m-%d").date()
 		format_str = '%m/%d/%Y'
-		trip_start = datetime.datetime.strptime(start,format_str).date()
+		trip_start = datetime.datetime.strptime(start_itinerary_date,format_str).date()
 		#print(datetime_obj.date())	
 		
-		end = request.POST.get('enddate','')
-		trip_end = datetime.datetime.strptime(end,format_str).date()
-		trip_start1 = datetime.datetime.strptime(start,format_str).strftime('%Y-%m-%d')
-		trip_end1 = datetime.datetime.strptime(end,format_str).strftime('%Y-%m-%d')
 		
-		print(start,end)
+		end_itinanery_date = request.POST.get('enddate','')
+		trip_end = datetime.datetime.strptime(end_itinanery_date,format_str).date()
+		trip_start1 = datetime.datetime.strptime(start_itinerary_date,format_str).strftime('%Y-%m-%d')
+		trip_end1 = datetime.datetime.strptime(end_itinanery_date,format_str).strftime('%Y-%m-%d')
+		
+		print(start_itinerary_date,end_itinanery_date)
 		print(trip_start1,trip_end1)
 		#request.session['start'] = trip_start
 		#request.session['end'] = trip_end
@@ -216,6 +235,7 @@ def trip(request):
 		#trip_start = datetime.datetime(2020,1,26) 
 		#trip_end = datetime.datetime(2020,1,30) # pela -> yy |  then ->  mm  | then -> dd
 		
+		global pack_night
 		pack_night = (trip_end - trip_start).days
 		global pack_days
 		pack_days = ((trip_end - trip_start) + timedelta(0,86400)).days # 1 divas add karo expicitly
@@ -234,7 +254,8 @@ def trip(request):
 		category='4bf58dd8d48988d181941735'
 		
 		print('Enter radius : ',end = '')
-		location_radius = int(request.POST.get('radius',''))
+		# location_radius = int(request.POST.get('radius',''))
+		global location_radius
 		location_radius = 150000
 		if activitypreferences == "monument" :
 			category='4bf58dd8d48988d12d941735'
@@ -267,18 +288,19 @@ def trip(request):
 		print(url)
 		results = requests.get(url).json()
 		d = json.dumps(results)
+		global e
 		e = json.loads(d) 
 		
-		alist=[]
+		
 		curr_day = 1
-		links= []
-		start =[]
-		end =[]
-		rating=[]
-		pname= []
-		paddress=[]
-		pcategory=[]
-		pdistance=[]
+		global links
+		global start
+		global end
+		global rating
+		global pname
+		global paddress
+		global pcategory
+		global pdistance
 		for place in results['response']['groups'][0]['items']:
 			try:
 			
@@ -546,7 +568,7 @@ def trip(request):
 		
 		#print(str(splited_optimizedItinenary))
 		
-		OptimizedItinerary1 = []
+		
 		OptimizedItineraryWithSplited = []
 		for RandomItinenary in splited_optimizedItinenary:
 			if len(RandomItinenary) >= 3:
@@ -562,7 +584,7 @@ def trip(request):
 		istart = request.POST.get('startdate','')
 		
 		print(type(istart))
-		return render(request,"map_page.html",{'radius':location_radius,'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'objs':results['response']['groups'][0]['items'],'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':main_list,'suggestionList' : SuggestionList,'category':activitypreferences})
+		return render(request,"map_page.html",{'radius':location_radius,'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':OptimizedItinerary,'suggestionList' : SuggestionList,'category':activitypreferences})
 		
 		
 def homepage(request):
@@ -575,33 +597,29 @@ def deletefunction(request):
 	
 	deleteplacelist = request.POST.get('deleteplacelist').split(',')
 	addplacelist = request.POST.get('addplacelist').split(',')
+
+	deleteplacelistint = [int(i) for i in deleteplacelist]
+	addplacelistint = [int(i) for i in addplacelist]
+
 		
-	deleteplacelist.sort(reverse=True)
+	deleteplacelistint.sort(reverse=True)
 	
-	print("Length : ")
-	print(len(OptimizedItinerary))
-	
-	for deleteplace in deleteplacelist: 
+	if len(deleteplacelistint) != 0:
+		for deleteplace in deleteplacelistint: 
+			del OptimizedItinerary[deleteplace-1]
 		
-		index = 0
-		for i in deleteplace:
-			index = index*10 + (ord(i)-ord('0'))
-		del OptimizedItinerary[index-1]
-		
-		
-	for addplace in addplacelist:
-	
-		index = 0
-		for i in addplace:
-			index = index*10 + (ord(i)-ord('0'))
-		OptimizedItinerary.append(SuggestionList[index-1])
+	if len(addplacelistint) != 0:	
+		for addplace in addplacelistint:
+			OptimizedItinerary.append(SuggestionList[addplace-1])
 	
 
 	SuggestionList.clear()
 	#print('After Deleting : ')
 	#print(OptimizedItinerary)
 
-	return render(request,'CustomizedItinenary.html',{'CustomizedItinenary' : OptimizedItinerary})	
+	#return render(request,'CustomizedItinenary.html',{'CustomizedItinenary' : OptimizedItinerary})	
+	return render(request,"map_page.html",{'radius':location_radius,'pname':pname,'paddress':paddress,'pdistance':pdistance,'pcategory':pcategory,'objects': e ,'city':location_name,'listabc':zip(links,start,end,rating),'istart':istart,'start':trip_start1,'end':trip_end1,'pack_days':pack_days,'pack_night':pack_night,'mainlist':OptimizedItinerary,'suggestionList' : SuggestionList,'category':activitypreferences})
+
 
 def login(request):
 	
@@ -740,8 +758,8 @@ def savetrip(request):
 		place=request.POST.get('places','')
 		category = request.POST.get('category','')
 		city = request.POST.get('city','')
-		start = request.POST.get('start','')
-		end = request.POST.get('end','')
+		start_save = request.POST.get('start','')
+		end_save = request.POST.get('end','')
 		radius = request.POST.get('radius','')
 		packdays = request.POST.get('packdays','')
 		pname = request.POST.get('pname','').split(',')
@@ -761,10 +779,11 @@ def savetrip(request):
 			b = pdistance[i]
 			c = paddress[i]
 			d = pcategory[i]
-			s = places(username=uname,city =city ,pack_days = int(packdays),start_date=start,end_date=end,place_name=a,place_address=c,place_distance=b,place_category=d)
+			s = places(username=uname,city =city ,pack_days = int(packdays),start_date=start_save,end_date=end_save,place_name=a,place_address=c,place_distance=b,place_category=d)
 			s.save()
-		t = trip_details(radius=int(radius),username=uname,trip=place,city=city,pack_days=int(packdays),start_date=start,end_date=end,category=category)
+		t = trip_details(radius=int(radius),username=uname,trip=place,city=city,pack_days=int(packdays),start_date=start_save,end_date=end_save,category=category)
 		t.save()
+		
 		return render(request,'myhome.html')	
 	else:
 		return render(request,'login.html')
@@ -861,6 +880,8 @@ def viewitin(request):
 		
 		end = request.POST.get('end','')
 		trip_end = datetime.datetime.strptime(end,format_str).date()
+		global trip_start1
+		global trip_end1
 		trip_start1 = datetime.datetime.strptime(start,format_str).strftime('%Y-%m-%d')
 		trip_end1 = datetime.datetime.strptime(end,format_str).strftime('%Y-%m-%d')
 		

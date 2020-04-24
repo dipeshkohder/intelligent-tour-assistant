@@ -61,12 +61,11 @@
 <body >
 
 
-
     <nav class="navbar navbar-expand-sm navbar-dark " style="height: 275px; background-image: url('/static/img/banner1.jpg'); background-repeat: no-repeat; background-size:cover;overflow: hidden; background-position: center; ">
         <a class="navbar-brand" href="#" style="padding-left:15px;">
-            <img src="../../assets/images/logo2.png" alt="Logo" style="width:40px;height: 40px;">
+            <img src="{%static 'img/logo.png'%}" alt="EP" style="width:100px;height: 80px;">
         </a>
-        <h3 style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif; color:white ; text-shadow: 0px 0px 10px #ffa31a; padding-top: 15px; font-weight: 900; ">
+        <h3 style="color: white; font-family:Verdana, Geneva, Tahoma, sans-serif; color: white; text-shadow: 5px 4px 10px #ffa31a; padding-top: 15px; font-weight: 900; ">
           <b>ESCAPE</b> PLAN
         </h3>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
@@ -77,83 +76,87 @@
             <ul class="navbar-nav mr-auto">
     
             </ul>
-    
+    <!-- 
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search">
                 <button class="btn btn-sm btn-outline-light" type="button"><i class='fa fa-search'
                         aria-hidden='true'></i> &nbsp;<b>SEARCH</b></button>
-            </form>
+            </form> -->
         </div>
     </nav>
-<!-- niche wala( blue ) header starts -->
-
-
-<nav class="navbar navbar-expand-sm  justify-content-center sticky-top"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px; background-color:white;">
-
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse justify-content-center" id="navb" >
-        <ul class="navbar-nav " style="margin-top:0px;">
+    
+    <!-- niche wala( blue ) header starts -->
+    
+    
+    <nav class="navbar navbar-expand-sm  justify-content-center sticky-top"  style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height:70px; background-color:white;">
+    
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        
+        <div class="collapse navbar-collapse justify-content-center" id="navb" >
+          <ul class="navbar-nav " style="margin-top:0px; ">
+              
+    
+              <li class="nav-item " style="padding-left:35px;padding-top:10px;">
+                  <a class="nav-link" href="/planning/home/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style="line-height: 55px;color:#ffa31a;cursor: pointer; "><b>HOME</b></a>
+              </li>
+              <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                  <a  class="nav-link" href="/planning/myplans/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b> MY ITINERARIES </b></a>
+              </li>
+              
+    
+              <a class="navbar-brand" href="#" style="padding-left:50px;">
+                  <img src="{%static 'img/logo.png'%}" alt="EP" style="width:100px;height: 80px;">
+              </a>
+    
+              <li class="nav-item" style="padding-left:26px;padding-top:10px;">
+                  <a class="nav-link" href="/planning/about/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>MEET OUR TEAM</b></a>
+              </li>
+              <li class="nav-item" style="padding-left:35px;padding-top:10px;">
+                  <a class="nav-link" href="/planning/contact/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>GET IN TOUCH</b></a>
+              </li>
+          </ul>
+      </div>
+        {% if request.session.username %}
+        <ul class="navbar-nav"  style="left:0;">
+          <li class="nav-item" id="signin" style="display: inline;">
+              <div class="btn-group" >				
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            ><b>{{request.session.username}}</b></button>
+          
+              <div class="dropdown-menu pull-left"> 
+              <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
+              <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
+              <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/planning/logout/">Logout</a> 
+              </div>
+            </div>
+          </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav">
             
-
-            <li class="nav-item " style="padding-left:35px;padding-top:0px;">
-                <a class="nav-link" href="/planning/home/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>HOME</b></a>
-            </li>
-            <li class="nav-item" style="padding-left:35px;padding-top:0px;">
-                <a  class="nav-link" href="/planning/myplans/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b> MY ITINERARIES </b></a>
-            </li>
-            
-
-            <a class="navbar-brand" href="#" style="padding-left:50px;">
-                <img src="../../assets/images/logo2.png" alt="Logo" style="width:50px;height: 30px;">
-            </a>
-
-            <li class="nav-item" style="padding-left:26px;padding-top:0px;">
-                <a class="nav-link" href="/planning/about/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>MEET OUR TEAM</b></a>
-            </li>
-            <li class="nav-item" style="padding-left:35px;padding-top:0px;">
-                <a class="nav-link" href="/planning/contact/" onmouseover ="this.style.color='black'" onmouseout ="this.style.color='#ffa31a'"   style=" line-height: 55px; color:#ffa31a;cursor: pointer; "><b>GET IN TOUCH</b></a>
+            <li class="nav-item" id="signin" style="display: inline;">
+              <div class="btn-group">				
+                          <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                 ><b>Sign In</b></button>
+                            
+                        <div class="dropdown-menu"> 
+                        <a class="dropdown-item" href="/planning/login/">Log In</a> 
+                        <div class="dropdown-divider"></div>
+    
+                          <a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
+                        </div>
+                      </div>
             </li>
         </ul>
-    </div>
-    <ul class="navbar-nav"  style="left:0;">
+        {% endif %}
         
-        
-            <li class="nav-item" id="signin" style="display: inline;">
-                <div class="btn-group" style="">				
-					<button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-							 ><b>Sign In</b></button>
-						
-					<div class="dropdown-menu pull-left"> 
-						<a class="dropdown-item" href="/planning/login/">Log In</a> 
-						<div class="dropdown-divider"></div>
-
-						<a class="dropdown-item" href="/planning/signup/">Don't have an account ?</a> 
-					</div>
-				</div>
-            </li>
-    </ul>
-
-    <ul class="navbar-nav"  style="left:0;">
-        <li class="nav-item" id="signin" style="display: inline;">
-            <div class="btn-group" >				
-              <button type="button" class="btn btn-outline-dark dropdown-toggle" style="margin-top:5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-          ><b>(( USERNAME ))</b></button>
-        
-      <div class="dropdown-menu pull-left"> 
-        <a class="dropdown-item" href="/planning/myaccount/">View Profile</a> 
-        <a class="dropdown-item" href="/planning/myplans/">My Plans</a> 
-        <div class="dropdown-divider"></div>
-
-        <a class="dropdown-item" href="/planning/signup/">Logout</a> 
-      </div>
-    </div>
-        </li>
-  </ul>
-</nav>
-
+    
+    
+    </nav>
 <script>
 $(document).ready(function(){
 		$("#flip").click(function(){
@@ -189,11 +192,11 @@ $(document).ready(function(){
 });
 </script>
 
-    <div class="container">
+    <div class="container" >
     <br><br>
 
         <form action="planning/deletefunction/" method="post">
-        <div  class="mybold-text" ><b>&nbsp;&nbsp;&nbsp;{{pack_days}} days in {{city}}</b>
+        <div  class="mybold-text" ><b>&nbsp;&nbsp;&nbsp;{{pack_days}} days in {{city}}</b></div>
         {%csrf_token%}
         
         <button id="build" onClick= "ShowList()" name="show" value="show" class="btn btn-sm btn-outline-light" style="display:none; float:right;"> Build New Customized Itinenary </button>
@@ -244,8 +247,6 @@ $(document).ready(function(){
 
 
 
-
-    
 <!-- footer -->
 <footer class="py-5">
 	<div class="container py-md-3">
@@ -279,7 +280,6 @@ $(document).ready(function(){
 		<p>Copyright © 2020 Escape Plan. All Rights Reserved | Design by <a href="#" target="=_blank"> Fruit Salad Technologies Pvt. Ltd. </a></p>
 	</div>
 </section>
-
 
 <style>
 .dot {
@@ -367,3 +367,5 @@ $(document).ready(function(){
 }
 
 </style>
+</body>
+</html>

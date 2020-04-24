@@ -223,7 +223,15 @@ $(document).ready(function(){
 	
 	
     <ul class="dropdown-menu"  role="menu" style="text-align:center; padding-bottom:15px;" >
-        <li style="padding-bottom:3px;"> <a href="/planning/trip/" class="btn btn-default  btn-outline-light menuitems " id="dbd" > Day By Day Plan </a></li>
+        <li style="padding-bottom:3px;"> <form action="/planning/tripmap/" method="post">
+			
+		<input type="hidden" name="city" value='{{city}}'>
+		<input type="hidden" name="end" value='{{end}}'>
+		<input type="hidden" name="start" value='{{start}}'>
+		<input type="hidden" name="category" value='{{category}}'>
+		<input type="hidden" name="radius" value='{{radius}}'>
+		<button class="btn btn-default  btn-outline-light menuitems ">Day by Day plan</button>
+		  </form></li>
         <li style="padding-bottom:3px;"> <a href="/planning/showmap/" class="btn btn-default  btn-outline-light menuitems" id="smap"> Show Places on Map </a></li>
         <!-- <li style="padding:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems"> place 3 </a></li> -->
     </ul>

@@ -387,7 +387,15 @@ $(document).ready(function(){
   </button>
   <ul class="dropdown-menu"  role="menu" style="text-align:center; padding-bottom:15px;" >
       <li style="padding-bottom:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems " id="dbd" > Day By Day Plan </a></li>
-      <li style="padding-bottom:3px;"> <a href="/planning/showmap/" class="btn btn-default  btn-outline-light menuitems" id="smap"> Show Places on Map </a></li>
+      <li style="padding-bottom:3px;"> <form action="/planning/showmap/" method="post">
+			
+		<input type="hidden" name="city" value='{{city}}'>
+		<input type="hidden" name="end" value='{{end}}'>
+		<input type="hidden" name="start" value='{{start}}'>
+		<input type="hidden" name="category" value='{{category}}'>
+		<input type="hidden" name="radius" value='{{radius}}'>
+		<button class="btn btn-default  btn-outline-light menuitems ">Show Places on Map</button>
+		  </form></li>
       <!-- <li style="padding:3px;"> <a href="#" class="btn btn-default  btn-outline-light menuitems"> place 3 </a></li> -->
   </ul>
   </div>
@@ -439,7 +447,7 @@ $(document).ready(function(){
 				<div class="column1"> Start ane end time batavase </div>
 							
 				<div class="column2">
-					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
+					<img src="{{obj.p_imageURL}}"  style="vertical-align:middle; height:180px;"><br>
 					<button class="btn btn-dark" style="width:155px;"> Explore This Place </button>
 				</div>
 				<div class="column3">
@@ -508,7 +516,7 @@ $(document).ready(function(){
 				<div class="column1"> Start ane end time batavase </div>
 							
 				<div class="column2">
-					<img src="home_bkg.jpg" alt="xyz" style="vertical-align:middle; height:180px;"><br>
+					<img src="{{obj.p_imageURL}}"  style="vertical-align:middle; height:180px;"><br>
 					<button class="btn btn-dark" style="width:155px;"> Explore This Place </button>
 				</div>
 				<div class="column3">
@@ -548,7 +556,7 @@ $(document).ready(function(){
 	
     	<li class="cards_item"  id="card{{forloop.counter}}">
       	<div class="card" style="width:300px;">
-        	<div class="card_image"><img class="imgCard" src="https://picsum.photos/500/300/?image=10"></div>
+        	<div class="card_image"><img class="imgCard" src="{{obj.p_imageURL}}"></div>
         	<div class="card_content">
           		<h2 class="card_title">{{obj.p_name}}</h2><b style=color:white;>Ratings : {{obj.p_ratings}}</b><br>
           	<p class="card_text">

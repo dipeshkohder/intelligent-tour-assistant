@@ -246,8 +246,8 @@ def trip(request):
 		rest_time = datetime.datetime(100,1,1,21,00,00)
 		
 		#setup for the foursquare API
-		client_id = 'M2QVKFEINCIFSIVH1OCONVATMWRPQNWTAPX5Q42VN3BDRMB5'
-		client_secret = 'LUU5AZWGRJIMVDTVSP3UQBN50TC0YHS5XZ44NHSXXM5KWRRQ'
+		client_id = '0XERSK2YASEXLFMV0JH4WP3NSHBKQNQJMNGRGQF1U03VXBI2'
+		client_secret = 'T5YIUEZC3MXSBTSANEVPPT3BD1VUBK3ENCAEJDWBFM11WEJ2'
 		version = '20120610'
 		limit = 100
 
@@ -365,11 +365,11 @@ def trip(request):
 					version
 					
 					)
-
 					#print("URL GOT: ",urldetails)
 
-					
 					dets = requests.get(urldetails).json()
+	
+	
 					#temp_a = json.dumps(dets)
 					#temp_b = json.loads(temp_a) 
 					#links.append(temp_b)
@@ -385,8 +385,7 @@ def trip(request):
 					#print("============================================================================================================")
 					for test in dets['response']['venue']['photos']['groups'][0]['items']:
 						links.append(test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix'])
-						mainobject.p_imageURL = test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix']
-					
+						mainobject.p_imageURL = test['prefix']+str(test['width'])+'x'+str(test['height'])+test['suffix']		
 					#for rating
 					'''key = "rating"
 					flag = 1
@@ -462,6 +461,8 @@ def trip(request):
 
 					
 					dets = requests.get(urldetails).json()
+					
+					
 					#temp_a = json.dumps(dets)
 					#temp_b = json.loads(temp_a) 
 					#links.append(temp_b)
@@ -922,8 +923,8 @@ def viewitin(request):
 		rest_time = datetime.datetime(100,1,1,21,00,00)
 		
 		#setup for the foursquare API
-		client_id = 'M2QVKFEINCIFSIVH1OCONVATMWRPQNWTAPX5Q42VN3BDRMB5'
-		client_secret = 'LUU5AZWGRJIMVDTVSP3UQBN50TC0YHS5XZ44NHSXXM5KWRRQ'
+		client_id = '4TJZYOSVJ5BGIXANW5K3X4QMRNX25CWDD0TS4ZRBTELHF2MC'
+		client_secret = 'UM53TTVUJYBV42AOCLECG2GSRKNAJSKGJXSF0AQZNLPPTRVP'
 		version = '20120610'
 		limit = 100
 

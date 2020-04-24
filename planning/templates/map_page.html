@@ -430,7 +430,7 @@ $(document).ready(function(){
 
 
 		<div style="height:40px; margin-left:65px;" >
-			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a id= "linkformap{{forloop.counter}}" target = "_blank" href="https://www.google.com/maps/dir/?api=1&origin={{obj.p_name}}&destination={{obj.p_name}}&travelmode=driving" onclick = "setLink()" ><i>30 min</i></a>
+			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a id= "linkformap{{forloop.counter}}" target = "_blank" href="https://www.google.com/maps/dir/?api=1&origin={{obj.p_name}}&destination={{obj.p_name}}&travelmode=driving" onclick = "setLink()" ><i>click here to view path in map</i></a>
 		</div>
 		
 		<script>
@@ -444,7 +444,7 @@ $(document).ready(function(){
 		
 			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
 
-				<div class="column1"> Start ane end time batavase </div>
+				<div class="column1">  </div>
 							
 				<div class="column2">
 					<img src="{{obj.p_imageURL}}"  style="vertical-align:middle; height:180px;"><br>
@@ -456,7 +456,7 @@ $(document).ready(function(){
 						<!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
 							
 							<h3><div>{{obj.place_name}}</div></h3>
-							<div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b>
+							<!---<div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b>-->
 							
 							<br>
 							<div class="desc" id = "description"></div><br>
@@ -499,7 +499,7 @@ $(document).ready(function(){
 
 
 		<div style="height:40px; margin-left:65px;" >
-			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a id= "linkformap{{forloop.counter}}" target = "_blank" href="https://www.google.com/maps/dir/?api=1&origin={{obj.p_name}}&destination={{obj.p_name}}&travelmode=driving" onclick = "setLink()" ><i>30 min</i></a>
+			<i class="fa fa-car fa-2x"   aria-hidden="true"></i> &nbsp;&nbsp;&nbsp;<a id= "linkformap{{forloop.counter}}" target = "_blank" href="https://www.google.com/maps/dir/?api=1&origin={{obj.p_name}}&destination={{obj.p_name}}&travelmode=driving" onclick = "setLink()" ><i>click here to view path on the map</i></a>
 		</div>
 		
 		<script>
@@ -513,7 +513,7 @@ $(document).ready(function(){
 		
 			<div class="mine-row" id="mr{{forloop.counter}}" style="margin-top:0px;">
 
-				<div class="column1"> Start ane end time batavase </div>
+				<div class="column1"></div>
 							
 				<div class="column2">
 					<img src="{{obj.p_imageURL}}"  style="vertical-align:middle; height:180px;"><br>
@@ -525,7 +525,7 @@ $(document).ready(function(){
 						<!-- <button class="btn-primary" onClick="delete_place({{forloop.counter}})">DELETE</button> -->
 							
 							<h3><div>{{obj.p_name}}</div></h3>
-							<div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b>
+							<!-- <div class="desc" id = "description"></div> <b>Ratings : {{obj.p_ratings}}</b> -->
 							
 							<br>
 							<div class="desc" id = "description"></div><br>
@@ -556,7 +556,7 @@ $(document).ready(function(){
 	
     	<li class="cards_item"  id="card{{forloop.counter}}">
       	<div class="card" style="width:300px;">
-        	<div class="card_image"><img class="imgCard" src="{{obj.p_imageURL}}"></div>
+        	<div class="card_image"><img class="imgCard" style="height:200px;" src="{{obj.p_imageURL}}"></div>
         	<div class="card_content">
           		<h2 class="card_title">{{obj.p_name}}</h2><b style=color:white;>Ratings : {{obj.p_ratings}}</b><br>
           	<p class="card_text">

@@ -41,6 +41,7 @@ SuggestionList = []
 istart = " "
 pack_days = 0
 mainobject = None
+city = " "
 
 def index(request):
 	return HttpResponse("hello World!! Django is unchained!")
@@ -180,6 +181,8 @@ def trip(request):
 		suggestionListSize = 0
 		print("Enter City Name : ",end = '')
 		location_name = request.POST.get('place','')
+		global city
+		city = location_name
 		start = request.POST.get('startdate','')
 		activitypreferences = request.POST.get('activitypreferences','')
 		
@@ -232,6 +235,7 @@ def trip(request):
 		
 		print('Enter radius : ',end = '')
 		location_radius = int(request.POST.get('radius',''))
+		location_radius = 150000
 		if activitypreferences == "monument" :
 			category='4bf58dd8d48988d12d941735'
 		elif activitypreferences == "culture":
@@ -542,16 +546,16 @@ def trip(request):
 		
 		#print(str(splited_optimizedItinenary))
 		
+		OptimizedItinerary1 = []
 		OptimizedItineraryWithSplited = []
 		for RandomItinenary in splited_optimizedItinenary:
 			if len(RandomItinenary) >= 3:
 				Itinenary,min_distance = travellingSalesmanProblem(RandomItinenary,0)
 				OptimizedItineraryWithSplited.append(Itinenary)
 
-		OptimizedItinerary = itertools.chain.from_iterable(OptimizedItineraryWithSplited)
+		OptimizedItinerary = list(itertools.chain.from_iterable(OptimizedItineraryWithSplited))
 		
-	
-		#main_list = OptimizedItinerary
+		#OptimizedItinerary = OptimizedItinerary1
 		#######################################################################################################################################
 		
 		global istart
@@ -567,20 +571,30 @@ def homepage(request):
 	
 	
 def deletefunction(request):
+
 	
 	deleteplacelist = request.POST.get('deleteplacelist').split(',')
 	addplacelist = request.POST.get('addplacelist').split(',')
 		
 	deleteplacelist.sort(reverse=True)
 	
+	print("Length : ")
+	print(len(OptimizedItinerary))
 	
 	for deleteplace in deleteplacelist: 
-		#print(ord(deleteplace)-ord('0'))
-		del OptimizedItinerary[ord(deleteplace)-ord('0')-1]
+		
+		index = 0
+		for i in deleteplace:
+			index = index*10 + (ord(i)-ord('0'))
+		del OptimizedItinerary[index-1]
 		
 		
 	for addplace in addplacelist:
-		OptimizedItinerary.append(SuggestionList[ord(addplace)-ord('0')-1])
+	
+		index = 0
+		for i in addplace:
+			index = index*10 + (ord(i)-ord('0'))
+		OptimizedItinerary.append(SuggestionList[index-1])
 	
 
 	SuggestionList.clear()
@@ -702,10 +716,10 @@ def showIndividualmap(request):
 	for i in range(0,pack_days):
 		pack_days_string.append(0)
 	 	
-	focuslnt = mainobject.p_lat
-	focuslng = mainobject.p_long
+	focuslnt = OptimizedItinerary[0].p_lat
+	focuslng = OptimizedItinerary[0].p_long
 		
-	return render(request,'showmap.html',{'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days,'OptimizedItinerary' : OptimizedItinerary,'focuslng':focuslng,'focuslnt':focuslnt})
+	return render(request,'showmap.html',{'city': city,'istart' : istart,'pack_days_string':pack_days_string,'pack_days':pack_days,'OptimizedItinerary' : OptimizedItinerary,'focuslng':focuslng,'focuslnt':focuslnt})
 
 
 def about(request):
